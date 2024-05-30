@@ -156,12 +156,114 @@ template <> struct DSU<void> : public DSUBase {
     DSU(int n) : DSUBase(n) {}
 };
 
+template <typename T> struct SegmentTree {
+    struct Node {
+        int l;
+        int r;
+        T value;
+
+        Node *left;
+        Node *right;
+
+        Node(int L, int R) : Node(L, R, T()) {}
+
+        Node(int L, int R, T val)
+            : l(L), r(R), left(nullptr), right(nullptr), value(val) {}
+
+        void add(T val, int i) {
+            if (i < l || r < i) {
+                return;
+            }
+            if (l == i && r == i) {
+                value = value + val;
+                return;
+            }
+            int mid = l + (r - l) / 2;
+            if (l <= i && i <= mid) {
+                if (left == nullptr) {
+                    left = new Node(l, mid);
+                }
+                left->add(val, i);
+            }
+            if (mid < i && i <= r) {
+                if (right == nullptr) {
+                    right = new Node(mid + 1, r);
+                }
+                right->add(val, i);
+            }
+            if (left == nullptr) {
+                value = right->value;
+                return;
+            }
+            if (right == nullptr) {
+                value = left->value;
+                return;
+            }
+            value = left->value + right->value;
+        }
+
+        T query(int L, int R) {
+            if (L <= l && r <= R) {
+                return value;
+            }
+            int mid = l + (r - l) / 2;
+            if (mid < L) {
+                if (right == nullptr) {
+                    return T();
+                }
+                return right->query(L, R);
+            }
+            if (mid + 1 > R) {
+                if (left == nullptr) {
+                    return T();
+                }
+                return left->query(L, R);
+            }
+            if (left == nullptr && right == nullptr) {
+                return T();
+            }
+            if (left == nullptr) {
+                return right->query(L, R);
+            }
+            if (right == nullptr) {
+                return left->query(L, R);
+            }
+            return left->query(L, R) + right->query(L, R);
+        }
+    };
+
+    Node *root;
+
+    SegmentTree() : root(nullptr) {}
+    SegmentTree(int l, int r) : SegmentTree() { setup(l, r); }
+
+    void setup(int l, int r) {
+        if (root != nullptr) {
+            delete root;
+        }
+        root = new Node(l, r);
+    }
+
+    void add(T value, int i) {
+        if (root != nullptr) {
+            root->add(value, i);
+        }
+    }
+
+    T query(int L, int R) {
+        if (root == nullptr) {
+            return T();
+        }
+        return root->query(L, R);
+    }
+};
+
 /*
  * Solution Code
  */
 
 void solve() {
-	// Solution
+    // Solution
 }
 
 int32_t main() {
