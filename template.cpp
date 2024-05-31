@@ -156,7 +156,7 @@ template <> struct DSU<void> : public DSUBase {
     DSU(int n) : DSUBase(n) {}
 };
 
-template <typename T> struct SegmentTree {
+template <typename T = void> struct SegmentTree {
     struct Node {
         int l;
         int r;
@@ -209,13 +209,13 @@ template <typename T> struct SegmentTree {
             int mid = l + (r - l) / 2;
             if (mid < L) {
                 if (right == nullptr) {
-                    return T();
+                    right = new Node(mid + 1, r);
                 }
                 return right->query(L, R);
             }
             if (mid + 1 > R) {
                 if (left == nullptr) {
-                    return T();
+                    left = new Node(l, mid);
                 }
                 return left->query(L, R);
             }
@@ -255,6 +255,161 @@ template <typename T> struct SegmentTree {
             return T();
         }
         return root->query(L, R);
+    }
+};
+
+template <> struct SegmentTree<void> {
+    struct Node {
+        int l;
+        int r;
+        int value;
+        int prop;
+
+        Node *left;
+        Node *right;
+
+        Node(int L, int R) : Node(L, R, 0) {}
+
+        Node(int L, int R, int val)
+            : l(L), r(R), left(nullptr), right(nullptr), value(val), prop(0) {}
+
+        void propagate() {
+            int mid = l + (r - l) / 2;
+            if (left == nullptr) {
+                left = new Node(l, mid);
+            }
+            if (right == nullptr) {
+                right = new Node(mid + 1, r);
+            }
+
+            left->addRange(prop, l, mid);
+            right->addRange(prop, mid + 1, r);
+            value = left->value + (left->r - left->l + 1) * left->prop +
+                    right->value + (right->r - right->l + 1) * right->prop;
+            prop = 0;
+        }
+
+        void add(int val, int i) {
+            if (i < l || r < i) {
+                return;
+            }
+            if (l == i && r == i) {
+                value = value + val;
+                return;
+            }
+            if (prop != 0) {
+                propagate();
+            }
+            int mid = l + (r - l) / 2;
+            if (l <= i && i <= mid) {
+                if (left == nullptr) {
+                    left = new Node(l, mid);
+                }
+                left->add(val, i);
+            }
+            if (mid < i && i <= r) {
+                if (right == nullptr) {
+                    right = new Node(mid + 1, r);
+                }
+                right->add(val, i);
+            }
+            if (left == nullptr) {
+                value = right->value;
+                return;
+            }
+            if (right == nullptr) {
+                value = left->value;
+                return;
+            }
+            value = left->value + right->value;
+        }
+
+        int query(int L, int R) {
+            if (L <= l && r <= R) {
+                return value + (r - l + 1) * prop;
+            }
+            if (prop != 0) {
+                propagate();
+            }
+            int mid = l + (r - l) / 2;
+            if (mid < L) {
+                if (right == nullptr) {
+                    right = new Node(mid + 1, r);
+                }
+                return right->query(L, R);
+            }
+            if (R < mid + 1) {
+                if (left == nullptr) {
+                    left = new Node(l, mid);
+                }
+                return left->query(L, R);
+            }
+            if (left == nullptr) {
+                left = new Node(l, mid);
+            }
+            if (right == nullptr) {
+                right = new Node(mid + 1, r);
+            }
+            return left->query(L, R) + right->query(L, R);
+        }
+
+        void addRange(int val, int L, int R) {
+            if (l > R || L > r) {
+                return;
+            }
+            if (l == r) {
+                if (L <= l && r <= R) {
+                    value += val;
+                }
+                return;
+            }
+            if (L <= l && r <= R) {
+                prop += val;
+                return;
+            }
+            int mid = l + (r - l) / 2;
+            if (left == nullptr) {
+                left = new Node(l, mid);
+            }
+            if (right == nullptr) {
+                right = new Node(mid + 1, r);
+            }
+            left->addRange(val, L, R);
+            right->addRange(val, L, R);
+            value = left->value + (left->r - left->l + 1) * left->prop +
+                    right->value + (right->r - right->l + 1) * right->prop;
+        }
+    };
+
+    Node *root;
+
+    SegmentTree() : root(nullptr) {}
+    SegmentTree(int l, int r) : SegmentTree() { setup(l, r); }
+
+    void setup(int l, int r) {
+        if (root != nullptr) {
+            delete root;
+        }
+        root = new Node(l, r);
+    }
+
+    void add(int value, int i) {
+        if (root != nullptr) {
+            root->add(value, i);
+        }
+    }
+
+    int query(int L, int R) {
+        if (root == nullptr) {
+            return 0;
+        }
+        return root->query(L, R);
+    }
+
+    void addRange(int value, int L, int R) {
+        if (root != nullptr) {
+            root->addRange(value, L, R);
+        }
     }
 };
 
