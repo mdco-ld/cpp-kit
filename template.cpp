@@ -1,24 +1,56 @@
 #include <bits/stdc++.h>
+#include <climits>
 
 using namespace std;
 
-#if 0
-#define _USE_T
-#endif
-
-#if defined(_mdco_local_)
-#define print(e) cerr << e << endl
-#else
-#define print(e)
-#endif
-
 using ll = long long;
-
-#define let auto
 
 #define int ll
 
-#define fn(...) [&](__VA_ARGS__)
+#define let auto
+#define fn [&]
+#define fnc [=]
+#define MOD (1000000007ll)
+
+void __dbg() { cerr << endl; }
+template <typename T> void __dbg(T t) { cerr << t << endl; }
+template <typename T, typename... TRest> void __dbg(T first, TRest... rest) {
+    cerr << first << ", ";
+    __dbg(rest...);
+}
+#define dbg(...)                                                               \
+    do {                                                                       \
+        cerr << "DBG> " << "(" << #__VA_ARGS__ << ") = ";                      \
+        __dbg(__VA_ARGS__);                                                    \
+    } while (0)
+
+template <typename T> void readList(vector<T> &v) {
+    int n;
+    cin >> n;
+    v.resize(n);
+    for (int i = 0; i < n; i++) {
+        cin >> v[i];
+    }
+}
+
+template <typename T> void readList(vector<T> &v, int n) {
+    v.resize(n);
+    for (int i = 0; i < n; i++) {
+        cin >> v[i];
+    }
+}
+
+template <typename T> void printList(vector<T> &v, const char *delim = " ") {
+    for (let x : v) {
+        cout << x << delim;
+    }
+    cout << endl;
+}
+
+template <typename T, typename U>
+ostream &operator<<(ostream &out, pair<T, U> p) {
+    return out << p.first << " " << p.second;
+}
 
 template <typename T = int> struct Point {
     T x;
@@ -37,123 +69,50 @@ template <typename T = int> struct Point {
     Point operator*(T val) { return Point(x * val, y * val); }
 };
 
-// Idempotent range queries
-template <typename T> struct IRQ {
-    vector<vector<T>> lkup;
-
-    IRQ(const vector<T> &vec) {
-        lkup.resize(vec.size());
-        for (int i = 0; i < vec.size(); i++) {
-            lkup[i].push_back(vec[i]);
-        }
-        for (int size = 2; size < vec.size(); size *= 2) {
-            for (int i = 0; i + size <= vec.size(); i++) {
-                lkup[i].push_back(lkup[i].back() + lkup[i + size / 2].back());
-            }
-        }
-    }
-
-    T query(int l, int r) {
-        if (l == r) {
-            return lkup[l][0];
-        }
-        int pow = 1;
-        while ((2 << pow) < r - l + 1) {
-            pow++;
-        }
-        int size = 1 << pow;
-        return lkup[l][pow] + lkup[r - size + 1][pow];
-    }
-};
-
-struct DSUBase {
-  private:
+struct DSU {
     vector<int> parent;
-    vector<int> size;
+    vector<int> cnt;
 
-  public:
-    DSUBase() {}
-    DSUBase(int n) {
-        size.assign(n, 1);
-        parent.resize(n);
-    }
+    DSU() {}
 
     void make_set(int x) {
-        if (x >= parent.size()) {
+        if (parent.size() <= x) {
             parent.resize(x + 1);
         }
-        if (x >= size.size()) {
-            size.resize(x + 1);
+        if (cnt.size() <= x) {
+            cnt.resize(x + 1);
         }
         parent[x] = x;
+        cnt[x] = 1;
     }
 
     int find(int x) {
-        if (x == parent[x]) {
+        if (x >= parent.size()) {
+            make_set(x);
+            return x;
+        }
+        if (parent[x] == x) {
             return x;
         }
         return parent[x] = find(parent[x]);
     }
 
-    void merge(int x, int y) {
+    void join(int x, int y) {
         x = find(x);
         y = find(y);
-        if (x == y) {
-            return;
-        }
-        if (size[x] < size[y]) {
+
+        if (cnt[x] < cnt[y]) {
             swap(x, y);
         }
         parent[y] = x;
-        size[x] += size[y];
+        cnt[x] += cnt[y];
     }
 
-    bool same(int x, int y) { return find(x) == find(y); }
-};
-
-template <typename T = void> struct DSU {
-  private:
-    DSUBase base;
-
-    map<T, int> id;
-    map<int, T> val;
-    int next_id;
-
-  public:
-    DSU() { next_id = 0; }
-
-    void make_set(T x) {
-        if (id.count(x)) {
-            return;
-        }
-        id.insert({x, next_id});
-        val.insert({next_id, x});
-        base.make_set(next_id);
-        next_id++;
+    bool same(int x, int y) {
+        x = find(x);
+        y = find(y);
+        return x == y;
     }
-
-    T find(T v) {
-        int x = id[v];
-        int p = base.find(x);
-        return val[p];
-    }
-
-    void merge(T x, T y) {
-        int x_id = id[x];
-        int y_id = id[y];
-        base.merge(x_id, y_id);
-    }
-
-    bool same(T x, T y) {
-        int x_id = id[x];
-        int y_id = id[y];
-        return base.same(x_id, y_id);
-    }
-};
-
-template <> struct DSU<void> : public DSUBase {
-    DSU() : DSUBase() {}
-    DSU(int n) : DSUBase(n) {}
 };
 
 template <typename T = void> struct SegmentTree {
@@ -202,7 +161,42 @@ template <typename T = void> struct SegmentTree {
             value = left->value + right->value;
         }
 
+        void update(T val, int i) {
+            if (i < l || r < i) {
+                return;
+            }
+            if (l == i && r == i) {
+                value = val;
+                return;
+            }
+            int mid = l + (r - l) / 2;
+            if (l <= i && i <= r) {
+                if (left == nullptr) {
+                    left = new Node(l, mid);
+                }
+                left->update(val, i);
+            }
+            if (mid < i && i <= r) {
+                if (right == nullptr) {
+                    right = new Node(mid + 1, r);
+                }
+                right->update(val, i);
+            }
+            if (left == nullptr) {
+                value = right->value;
+                return;
+            }
+            if (right == nullptr) {
+                value = left->value;
+                return;
+            }
+            value = left->value + right->value;
+        }
+
         T query(int L, int R) {
+            if (R < L) {
+                return T();
+            }
             if (L <= l && r <= R) {
                 return value;
             }
@@ -247,6 +241,12 @@ template <typename T = void> struct SegmentTree {
     void add(T value, int i) {
         if (root != nullptr) {
             root->add(value, i);
+        }
+    }
+
+    void update(T value, int i) {
+        if (root != nullptr) {
+            root->update(value, i);
         }
     }
 
@@ -399,6 +399,12 @@ template <> struct SegmentTree<void> {
         }
     }
 
+    void update(int value, int i) {
+        int val = query(i, i);
+        add(-val, i);
+        add(value, i);
+    }
+
     int query(int L, int R) {
         if (root == nullptr) {
             return 0;
@@ -413,25 +419,186 @@ template <> struct SegmentTree<void> {
     }
 };
 
-/*
- * Solution Code
- */
+constexpr int phi_ct(int n) {
+    if (n == MOD) {
+        return n - 1;
+    }
+    if (n == MOD - 1) {
+        return (n - 1) / 2 - 1;
+    }
+    int result = 1;
+    for (int i = 2; i <= n; i++) {
+        if (n % i == 0) {
+            int c = 0;
+            while (n % i == 0) {
+                n /= i;
+                c++;
+            }
+            result *= i - 1;
+            for (int i = 1; i < c; i++) {
+                result *= i;
+            }
+        }
+    }
+    return result;
+}
+
+struct intmax {
+    int value;
+
+    intmax() : value(numeric_limits<int>::min()) {}
+    intmax(int v) : value(v) {}
+
+    intmax operator+(intmax other) { return intmax(max(value, other.value)); }
+    operator int() { return value; }
+};
+
+struct intmin {
+    int value;
+
+    intmin() : value(numeric_limits<int>::max()) {}
+    intmin(int v) : value(v) {}
+
+    intmin operator+(intmin other) { return intmin(min(value, other.value)); }
+    operator int() { return value; }
+};
+
+template <int mod> struct intmod {
+    static constexpr int mod_phi = phi_ct(mod);
+    int value;
+    constexpr intmod() : value(0) {}
+    constexpr intmod(int x) {
+        value = x % mod;
+        if (value < 0) {
+            value += mod;
+        }
+    }
+    constexpr operator int() { return value; }
+    constexpr intmod pow(int e) {
+        intmod result = 1;
+        intmod base = value;
+        if (e < 0) {
+            e = (e % mod_phi) + mod_phi;
+        }
+        while (e) {
+            if (e & 1) {
+                result *= base;
+            }
+            base *= base;
+            e /= 2;
+        }
+        return result;
+    }
+    constexpr intmod inverse() { return pow(mod_phi - 1); }
+    constexpr intmod operator+(intmod other) {
+        return intmod(value + other.value);
+    }
+    constexpr intmod operator-(intmod other) {
+        return intmod(value - other.value);
+    }
+    constexpr intmod operator*(intmod other) {
+        return intmod(value * other.value);
+    }
+    constexpr intmod operator/(intmod other) { return *this * other.inverse(); }
+    constexpr intmod operator+=(intmod other) {
+        value = (value + other.value) % mod;
+        return *this;
+    }
+    constexpr intmod operator-=(intmod other) {
+        value = (value - other.value) % mod;
+        return *this;
+    }
+    constexpr intmod operator*=(intmod other) {
+        value = (value * other.value) % mod;
+        return *this;
+    }
+    constexpr intmod operator++() {
+        value = (value + 1) % mod;
+        return *this;
+    }
+    constexpr intmod operator++(int32_t) {
+        value = (value + 1) % mod;
+        return *this - 1;
+    }
+    constexpr intmod operator--() {
+        value = (value - 1 + mod) % mod;
+        return *this;
+    }
+    constexpr intmod operator--(int32_t) {
+        value = (value - 1 + mod) % mod;
+        return *this + 1;
+    }
+};
+
+template <int mod> struct Combinatorics {
+
+    intmod<mod> fact(int n) {
+        if (n == 0) {
+            return 1;
+        }
+        intmod<mod> prod = 1;
+        for (int i = 2; i <= n; i++) {
+            prod *= i;
+        }
+        return prod;
+    }
+
+    intmod<mod> choose(int n, int k) {
+        if (k > n) {
+            return 0;
+        }
+        intmod<mod> result = 1;
+        for (int i = 0; i < k; i++) {
+            result *= n - i;
+        }
+        intmod<mod> d = fact(k);
+        return result / d;
+    }
+};
+
+static Combinatorics<MOD> combo;
+
+using pii = pair<int, int>;
+using intm = intmod<MOD>;
+
+int bs_first(int start, int end, function<bool(int)> f) {
+    int ans = -1;
+    while (start <= end) {
+        int mid = start + (end - start) / 2;
+        if (f(mid)) {
+            ans = mid;
+            end = mid - 1;
+        } else {
+            start = mid + 1;
+        }
+    }
+    return ans;
+}
+
+int bs_last(int start, int end, function<bool(int)> f) {
+    int ans = -1;
+    while (start <= end) {
+        int mid = start + (end - start) / 2;
+        if (f(mid)) {
+            ans = mid;
+            start = mid + 1;
+        } else {
+            end = mid - 1;
+        }
+    }
+    return ans;
+}
 
 void solve() {
-    // Solution
 }
 
 int32_t main() {
     ios_base::sync_with_stdio(false);
-    cin.tie(0);
-#if defined(_USE_T)
+    cin.tie(nullptr);
     int t;
     cin >> t;
     while (t--) {
         solve();
     }
-#else
-    solve();
-#endif
     return 0;
 }
