@@ -52,22 +52,64 @@ ostream &operator<<(ostream &out, pair<T, U> p) {
     return out << p.first << " " << p.second;
 }
 
-template <typename T = int> struct Point {
+namespace geo {
+
+template <typename T = int> struct point {
     T x;
     T y;
 
-    Point() : x(0), y(0) {}
-    Point(T x, T y) : x(x), y(y) {}
-    Point(const Point &other) : x(other.x), y(other.y) {}
-    Point operator-() { return Point(-x, -y); }
-    Point operator+(const Point &other) {
-        return Point(other.x + x, other.y + y);
+    point() : x(0), y(0) {}
+    point(T x, T y) : x(x), y(y) {}
+    point(const point &other) : x(other.x), y(other.y) {}
+    point operator-() { return point(-x, -y); }
+    point operator+(const point &other) {
+        return point(other.x + x, other.y + y);
     }
-    Point operator-(const Point &other) {
-        return Point(x - other.x, y - other.y);
+    point operator-(const point &other) {
+        return point(x - other.x, y - other.y);
     }
-    Point operator*(T val) { return Point(x * val, y * val); }
+    point operator*(T val) { return point(x * val, y * val); }
+    T operator*(point other) { return x * other.x + y * other.y; }
 };
+
+template <typename T> T shoelace(point<T> p1, point<T> p2) {
+    return p1.x * p2.y - p1.y * p2.x;
+}
+
+template <typename T = int> T area(point<T> p1, point<T> p2, point<T> p3) {
+    return shoelace(p1, p2) + shoelace(p2, p3) + shoelace(p3, p1);
+}
+
+template <typename T = int>
+bool intersects(point<T> p1, point<T> p2, point<T> p3, point<T> p4) {
+    if (area(p1, p2, p3) == 0 && area(p1, p2, p4) == 0) {
+        let inter = fn(int a, int b, int c, int d) {
+            if (a > b) {
+                swap(a, b);
+            }
+            if (c > d) {
+                swap(c, d);
+            }
+            return max(a, c) <= min(b, d);
+        };
+        return inter(p1.x, p2.x, p3.x, p4.x) && inter(p1.y, p2.y, p3.y, p4.y);
+    }
+    let sgn = [](int x) {
+        if (x == 0) {
+            return 0;
+        }
+        if (x < 0) {
+            return -1;
+        }
+        return 1;
+    };
+    return sgn(area(p1, p2, p3)) != sgn(area(p1, p2, p4)) &&
+           sgn(area(p3, p4, p1)) != sgn(area(p3, p4, p2));
+}
+
+using pointf = point<double>;
+
+}; // namespace geo
 
 struct DSU {
     vector<int> parent;
