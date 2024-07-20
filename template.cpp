@@ -11,6 +11,17 @@ using ll = long long;
 #define fnc [=]
 #define MOD (1000000007ll)
 
+#define YES                                                                    \
+    do {                                                                       \
+        cout << "Yes\n";                                                       \
+        return;                                                                \
+    } while (0)
+#define NO                                                                     \
+    do {                                                                       \
+        cout << "No\n";                                                        \
+        return;                                                                \
+    } while (0)
+
 void __dbg() { cerr << endl; }
 template <typename T> void __dbg(T t) { cerr << t << endl; }
 template <typename T, typename... TRest> void __dbg(T first, TRest... rest) {
@@ -24,13 +35,13 @@ template <typename T, typename... TRest> void __dbg(T first, TRest... rest) {
     } while (0)
 
 template <typename T> void readList(vector<T> &v) {
-    for (let &t: v) {
+    for (let &t : v) {
         cin >> t;
     }
 }
 
 template <typename T> void readList(vector<T> &v, int &n) {
-	cin>>n;
+    cin >> n;
     v.resize(n);
     for (int i = 0; i < n; i++) {
         cin >> v[i];
@@ -486,11 +497,9 @@ struct Sieve {
     vector<int32_t> lp;
     vector<int32_t> pr;
 
-	Sieve() {}
+    Sieve() {}
 
-	Sieve(int n) {
-		setup(n);
-	}
+    Sieve(int n) { setup(n); }
 
     void setup(int n) {
         lp.resize(n + 1);
@@ -659,6 +668,9 @@ int bs_last(int start, int end, function<bool(int)> f) {
     }
     return ans;
 }
+
+int n;
+vector<int> v;
 
 void solve() {
 }
