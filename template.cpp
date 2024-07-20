@@ -24,15 +24,13 @@ template <typename T, typename... TRest> void __dbg(T first, TRest... rest) {
     } while (0)
 
 template <typename T> void readList(vector<T> &v) {
-    int n;
-    cin >> n;
-    v.resize(n);
-    for (int i = 0; i < n; i++) {
-        cin >> v[i];
+    for (let &t: v) {
+        cin >> t;
     }
 }
 
-template <typename T> void readList(vector<T> &v, int n) {
+template <typename T> void readList(vector<T> &v, int &n) {
+	cin>>n;
     v.resize(n);
     for (int i = 0; i < n; i++) {
         cin >> v[i];
