@@ -616,11 +616,9 @@ template <int mod> struct intmod {
 template <int mod> struct Combinatorics {
 
     vector<intmod<mod>> fact_cache = {1};
+    vector<intmod<mod>> invfact_cache = {1};
 
     intmod<mod> fact(int n) {
-        if (n == 0) {
-            return 1;
-        }
         if (fact_cache.size() > n) {
             return fact_cache[n];
         }
@@ -629,11 +627,21 @@ template <int mod> struct Combinatorics {
         return fact_cache[n];
     }
 
+    intmod<mod> inv_fact(int n) {
+        if (invfact_cache.size() > n) {
+            return invfact_cache[n];
+        }
+        intmod<mod> f = inv_fact(n - 1);
+        f *= intmod<mod>(n).inverse();
+        invfact_cache.push_back(f);
+        return invfact_cache[n];
+    }
+
     intmod<mod> choose(int n, int k) {
         if (k > n) {
             return 0;
         }
-        return fact(n) / (fact(n - k) * fact(k));
+        return fact(n) * inv_fact(n - k) * inv_fact(k);
     }
 };
 
@@ -673,7 +681,8 @@ int bs_last(int start, int end, function<bool(int)> f) {
 int n;
 vector<int> v;
 
-void solve() {}
+void solve() {
+}
 
 int32_t main() {
     ios_base::sync_with_stdio(false);
