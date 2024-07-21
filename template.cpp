@@ -569,7 +569,12 @@ template <int mod> struct intmod {
         }
         return result;
     }
-    constexpr intmod inverse() { return pow(mod_phi - 1); }
+    static constexpr intmod inverse(int x) {
+        return x <= 1 ? x : mod - (int)(mod / x) * inverse(mod % x) % mod;
+    }
+    constexpr intmod inverse() {
+		return inverse(value);
+	}
     constexpr intmod operator+(intmod other) {
         return intmod(value + other.value);
     }
