@@ -572,9 +572,7 @@ template <int mod> struct intmod {
     static constexpr intmod inverse(int x) {
         return x <= 1 ? x : mod - (int)(mod / x) * inverse(mod % x) % mod;
     }
-    constexpr intmod inverse() {
-		return inverse(value);
-	}
+    constexpr intmod inverse() { return inverse(value); }
     constexpr intmod operator+(intmod other) {
         return intmod(value + other.value);
     }
@@ -617,27 +615,25 @@ template <int mod> struct intmod {
 
 template <int mod> struct Combinatorics {
 
+    vector<intmod<mod>> fact_cache = {1};
+
     intmod<mod> fact(int n) {
         if (n == 0) {
             return 1;
         }
-        intmod<mod> prod = 1;
-        for (int i = 2; i <= n; i++) {
-            prod *= i;
+        if (fact_cache.size() > n) {
+            return fact_cache[n];
         }
-        return prod;
+        intmod<mod> prev = fact(n - 1);
+        fact_cache.push_back(prev * intmod<mod>(n));
+        return fact_cache[n];
     }
 
     intmod<mod> choose(int n, int k) {
         if (k > n) {
             return 0;
         }
-        intmod<mod> result = 1;
-        for (int i = 0; i < k; i++) {
-            result *= n - i;
-        }
-        intmod<mod> d = fact(k);
-        return result / d;
+        return fact(n) / (fact(n - k) * fact(k));
     }
 };
 
@@ -677,8 +673,7 @@ int bs_last(int start, int end, function<bool(int)> f) {
 int n;
 vector<int> v;
 
-void solve() {
-}
+void solve() {}
 
 int32_t main() {
     ios_base::sync_with_stdio(false);
