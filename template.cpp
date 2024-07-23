@@ -645,8 +645,6 @@ template <int mod> struct Combinatorics {
     }
 };
 
-static Combinatorics<MOD> combo;
-
 using pii = pair<int, int>;
 using intm = intmod<MOD>;
 
@@ -677,6 +675,8 @@ int bs_last(int start, int end, function<bool(int)> f) {
     }
     return ans;
 }
+
+static Combinatorics<MOD> combo;
 
 int n;
 vector<int> v;
