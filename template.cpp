@@ -678,7 +678,7 @@ int bs_last(int start, int end, function<bool(int)> f) {
 
 static Combinatorics<MOD> combo;
 
-int n;
+int n, m;
 vector<int> v;
 
 void solve() {
