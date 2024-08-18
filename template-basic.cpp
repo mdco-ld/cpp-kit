@@ -18,21 +18,25 @@ template <typename T, typename... TRest> void __dbg(T first, TRest... rest) {
         __dbg(__VA_ARGS__);                                                    \
     } while (0)
 
+#define unreachable                                                            \
+    do {                                                                       \
+        assert(false);                                                         \
+    } while (0)
+
 const int MOD = 1e9 + 7;
 const int N = 4e5 + 5;
 
 mt19937 rng(random_device{}());
-int n, m, k;
-int arr[N];
+int n, m, k, q;
 int v[N];
 vector<int> edges[N];
 
 int32_t main() {
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
-	int t;
-	cin>>t;
-	while (t--) {
-	}
+    int t;
+    cin >> t;
+    while (t--) {
+    }
     return 0;
 }
