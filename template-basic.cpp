@@ -23,6 +23,15 @@ template <typename T, typename... TRest> void __dbg(T first, TRest... rest) {
         assert(false);                                                         \
     } while (0)
 
+template <typename T> T maxx(T t) { return t; }
+template <typename T, typename... TRest> T maxx(T first, TRest... rest) {
+    return max<T>(first, maxx(rest...));
+}
+template <typename T> T minn(T t) { return t; }
+template <typename T, typename... TRest> T minn(T first, TRest... rest) {
+    return min<T>(first, minn(rest...));
+}
+
 const int MOD = 1e9 + 7;
 const int N = 4e5 + 5;
 
