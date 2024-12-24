@@ -40,6 +40,7 @@ template <size_t maxn, bool digraph = false> struct Graph {
         for (int i = 0; i <= n; i++) {
             edges[i].clear();
         }
+		n = 0;
     }
     void edge(int a, int b) {
         n = maxx(n, a, b);
@@ -51,6 +52,38 @@ template <size_t maxn, bool digraph = false> struct Graph {
         }
     }
     vector<int> &operator[](int a) { return edges[a]; }
+};
+
+template <size_t maxn, bool digraph = false> struct WGraph {
+	struct Edge {
+		int v;
+		int w;
+		bool operator<(const Edge &other) const {
+			return toPair() < other.toPair();
+		}
+		pair<int, int> toPair() {
+			return {w, v};
+		};
+	};
+    vector<Edge> edges[maxn];
+    int n;
+    WGraph() { n = 0; };
+    void clear() {
+        for (int i = 0; i <= n; i++) {
+            edges[i].clear();
+        }
+		n = 0;
+    }
+    void edge(int a, int b, int w) {
+        n = maxx(n, a, b);
+        if constexpr (digraph) {
+            edges[a].push_back({b, w});
+        } else {
+            edges[a].push_back({b, w});
+            edges[b].push_back({a, w});
+        }
+    }
+    vector<Edge> &operator[](int a) { return edges[a]; }
 };
 
 const int MOD = 1e9 + 7;
