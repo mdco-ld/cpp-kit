@@ -32,6 +32,27 @@ template <typename T, typename... TRest> T minn(T first, TRest... rest) {
     return min<T>(first, minn(rest...));
 }
 
+template <size_t maxn, bool digraph = false> struct Graph {
+    vector<int> edges[maxn];
+    int n;
+    Graph() { n = 0; };
+    void clear() {
+        for (int i = 0; i <= n; i++) {
+            edges[i].clear();
+        }
+    }
+    void edge(int a, int b) {
+        n = maxx(n, a, b);
+        if constexpr (digraph) {
+            edges[a].push_back(b);
+        } else {
+            edges[a].push_back(b);
+            edges[b].push_back(a);
+        }
+    }
+    vector<int> &operator[](int a) { return edges[a]; }
+};
+
 const int MOD = 1e9 + 7;
 
 mt19937 rng(random_device{}());
