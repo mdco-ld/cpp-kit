@@ -29,6 +29,9 @@ template <typename T, typename... TRest> void __dbg(T first, TRest... rest) {
         assert(false);                                                         \
     } while (0)
 
+#define makefn(fn) [](auto... args) { return fn(args...); }
+#define constfn(val) []() -> decltype(val) { return val; }
+
 template <typename T> T maxx(T t) { return t; }
 template <typename T, typename... TRest> T maxx(T first, TRest... rest) {
     return max<T>(first, maxx(rest...));
