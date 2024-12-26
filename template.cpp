@@ -6,10 +6,16 @@ using ll = long long;
 
 #define int ll
 
+template <typename T> void __dbg2(T t) { cerr << t; }
+template <> void __dbg2(bool t) { cerr << (t ? "true" : "false"); }
 void __dbg() { cerr << endl; }
-template <typename T> void __dbg(T t) { cerr << t << endl; }
+template <typename T> void __dbg(T t) {
+    __dbg2(t);
+    cerr << endl;
+}
 template <typename T, typename... TRest> void __dbg(T first, TRest... rest) {
-    cerr << first << ", ";
+    __dbg2(first);
+    cerr << ", ";
     __dbg(rest...);
 }
 #define dbg(...)                                                               \
@@ -40,7 +46,7 @@ template <size_t maxn, bool digraph = false> struct Graph {
         for (int i = 0; i <= n; i++) {
             edges[i].clear();
         }
-		n = 0;
+        n = 0;
     }
     void edge(int a, int b) {
         n = maxx(n, a, b);
@@ -55,16 +61,14 @@ template <size_t maxn, bool digraph = false> struct Graph {
 };
 
 template <size_t maxn, bool digraph = false> struct WGraph {
-	struct Edge {
-		int v;
-		int w;
-		bool operator<(const Edge &other) const {
-			return toPair() < other.toPair();
-		}
-		pair<int, int> toPair() {
-			return {w, v};
-		};
-	};
+    struct Edge {
+        int v;
+        int w;
+        bool operator<(const Edge &other) const {
+            return toPair() < other.toPair();
+        }
+        pair<int, int> toPair() { return {w, v}; };
+    };
     vector<Edge> edges[maxn];
     int n;
     WGraph() { n = 0; };
@@ -72,7 +76,7 @@ template <size_t maxn, bool digraph = false> struct WGraph {
         for (int i = 0; i <= n; i++) {
             edges[i].clear();
         }
-		n = 0;
+        n = 0;
     }
     void edge(int a, int b, int w) {
         n = maxx(n, a, b);
