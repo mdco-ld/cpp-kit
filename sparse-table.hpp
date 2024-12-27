@@ -1,7 +1,12 @@
+#ifndef _MO_SPARSE_TABLE_
+#define _MO_SPARSE_TABLE_
+
 #include <cassert>
 #include <vector>
 
 namespace MO {
+
+namespace ds {
 
 template <class T, T (*op)(T, T)> struct SparseTable {
     std::vector<std::vector<T>> st;
@@ -26,4 +31,8 @@ template <class T, T (*op)(T, T)> struct SparseTable {
     }
 };
 
+}; // namespace ds
+
 }; // namespace MO
+
+#endif
