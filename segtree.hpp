@@ -1,6 +1,11 @@
+#ifndef _MO_SEGTREE_
+#define _MO_SEGTREE_
+
 #include <vector>
 
 namespace MO {
+
+namespace ds {
 
 template <class T, T (*op)(T, T), T (*e)()> struct SegmentTree {
     std::vector<T> t;
@@ -38,4 +43,8 @@ template <class T, T (*op)(T, T), T (*e)()> struct SegmentTree {
     }
 };
 
+}; // namespace ds
+
 }; // namespace MO
+
+#endif
