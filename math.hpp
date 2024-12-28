@@ -4,10 +4,9 @@
 #include <algorithm>
 #include <cstdint>
 #include <iostream>
+#include <numbers>
 #include <vector>
-
-using std::cerr;
-using std::endl;
+#include <complex>
 
 namespace MO {
 
@@ -75,6 +74,7 @@ std::ostream &operator<<(std::ostream &out, ModInt<mod> value) {
 template <typename T> T getRoot(size_t r);
 
 template <> inline ModInt<DEFAULT_PRIME_MOD> getRoot(size_t r) {
+	r = std::__bit_width(r) - 1;
     static constexpr int64_t roots[] = {
         1,         998244352, 911660635, 372528824, 929031873, 452798380,
         922799308, 781712469, 476477967, 166035806, 258648936, 584193783,
@@ -83,8 +83,35 @@ template <> inline ModInt<DEFAULT_PRIME_MOD> getRoot(size_t r) {
     return roots[r];
 }
 
+template<> inline std::complex<double> getRoot<std::complex<double>>(size_t r) {
+	double angle = 2 * std::numbers::pi / r;
+	return std::complex<double>(std::cos(angle), std::sin(angle));
+}
+
+template<> inline std::complex<long double> getRoot<std::complex<long double>>(size_t r) {
+	double angle = 2 * std::numbers::pi / r;
+	return std::complex<long double>(std::cos(angle), std::sin(angle));
+}
+
+template<> inline std::complex<float> getRoot<std::complex<float>>(size_t r) {
+	double angle = 2 * std::numbers::pi / r;
+	return std::complex<float>(std::cos(angle), std::sin(angle));
+}
+
 template <int64_t mod> inline ModInt<mod> getInverse(ModInt<mod> val) {
     return val.inverse();
+}
+
+inline float getInverse(float val) {
+	return 1.0 / val;
+}
+
+inline double getInverse(double val) {
+	return 1.0 / val;
+}
+
+inline long double getInverse(long double val) {
+	return 1.0 / val;
 }
 
 template <typename T> std::vector<T> fft(std::vector<T> a) {
@@ -103,7 +130,7 @@ template <typename T> std::vector<T> fft(std::vector<T> a) {
     even = fft(even);
     odd = fft(odd);
     std::vector<T> result(m);
-    T omega = getRoot<T>(std::__bit_width(m) - 1);
+    T omega = getRoot<T>(m);
     T om = 1;
     for (size_t i = 0; i < m / 2; i++) {
         result[i] = even[i] + om * odd[i];
