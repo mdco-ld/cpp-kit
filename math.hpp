@@ -2,11 +2,11 @@
 #define _MO_MATH_
 
 #include <algorithm>
+#include <complex>
 #include <cstdint>
 #include <iostream>
 #include <numbers>
 #include <vector>
-#include <complex>
 
 namespace MO {
 
@@ -74,7 +74,7 @@ std::ostream &operator<<(std::ostream &out, ModInt<mod> value) {
 template <typename T> T getRoot(size_t r);
 
 template <> inline ModInt<DEFAULT_PRIME_MOD> getRoot(size_t r) {
-	r = std::__bit_width(r) - 1;
+    r = std::__bit_width(r) - 1;
     static constexpr int64_t roots[] = {
         1,         998244352, 911660635, 372528824, 929031873, 452798380,
         922799308, 781712469, 476477967, 166035806, 258648936, 584193783,
@@ -83,61 +83,63 @@ template <> inline ModInt<DEFAULT_PRIME_MOD> getRoot(size_t r) {
     return roots[r];
 }
 
-template<> inline std::complex<double> getRoot<std::complex<double>>(size_t r) {
-	double angle = 2 * std::numbers::pi / r;
-	return std::complex<double>(std::cos(angle), std::sin(angle));
+template <>
+inline std::complex<double> getRoot<std::complex<double>>(size_t r) {
+    double angle = 2 * std::numbers::pi / r;
+    return std::complex<double>(std::cos(angle), std::sin(angle));
 }
 
-template<> inline std::complex<long double> getRoot<std::complex<long double>>(size_t r) {
-	double angle = 2 * std::numbers::pi / r;
-	return std::complex<long double>(std::cos(angle), std::sin(angle));
+template <>
+inline std::complex<long double> getRoot<std::complex<long double>>(size_t r) {
+    double angle = 2 * std::numbers::pi / r;
+    return std::complex<long double>(std::cos(angle), std::sin(angle));
 }
 
-template<> inline std::complex<float> getRoot<std::complex<float>>(size_t r) {
-	double angle = 2 * std::numbers::pi / r;
-	return std::complex<float>(std::cos(angle), std::sin(angle));
+template <> inline std::complex<float> getRoot<std::complex<float>>(size_t r) {
+    double angle = 2 * std::numbers::pi / r;
+    return std::complex<float>(std::cos(angle), std::sin(angle));
 }
 
 template <int64_t mod> inline ModInt<mod> getInverse(ModInt<mod> val) {
     return val.inverse();
 }
 
-inline float getInverse(float val) {
-	return 1.0 / val;
-}
+inline float getInverse(float val) { return 1.0 / val; }
 
-inline double getInverse(double val) {
-	return 1.0 / val;
-}
+inline double getInverse(double val) { return 1.0 / val; }
 
-inline long double getInverse(long double val) {
-	return 1.0 / val;
-}
+inline long double getInverse(long double val) { return 1.0 / val; }
 
-template <typename T> std::vector<T> fft(std::vector<T> a) {
+template <typename T> std::vector<T> &fft(std::vector<T> &a) {
     size_t m = a.size();
     if (m == 1) {
         return a;
     }
-    std::vector<T> even(m / 2);
-    std::vector<T> odd(m / 2);
-    for (size_t i = 0; i < m; i += 2) {
-        even[i / 2] = a[i];
+    std::vector<T> b(m);
+    for (size_t k = m; k > 1; k >>= 1) {
+        for (size_t l = 0; l < m; l += k) {
+            for (size_t i = 0; i < k; i += 2) {
+                b[l + i / 2] = a[l + i];
+            }
+            for (size_t i = 1; i < k; i += 2) {
+                b[l + i / 2 + k / 2] = a[l + i];
+            }
+        }
+        swap(a, b);
     }
-    for (size_t i = 1; i < m; i += 2) {
-        odd[i / 2] = a[i];
+    for (size_t k = 2; k <= m; k <<= 1) {
+		for (size_t l = 0; l < m; l += k) {
+			T omega = getRoot<T>(k);
+			T om = 1;
+			for (size_t i = 0; i < k / 2; i++) {
+				b[l + i] = a[l + i] + om * a[l + i + k / 2];
+				b[l + i + k / 2] = a[l + i] - om * a[l + i + k / 2];
+				om *= omega;
+			}
+		}
+		swap(a, b);
     }
-    even = fft(even);
-    odd = fft(odd);
-    std::vector<T> result(m);
-    T omega = getRoot<T>(m);
-    T om = 1;
-    for (size_t i = 0; i < m / 2; i++) {
-        result[i] = even[i] + om * odd[i];
-        result[i + m / 2] = even[i] - om * odd[i];
-        om *= omega;
-    }
-    return result;
+	return a;
 }
 
 template <typename T>
@@ -146,12 +148,12 @@ std::vector<T> convolution(std::vector<T> a, std::vector<T> b) {
     m = 1ll << (std::__bit_width(m));
     a.resize(m);
     b.resize(m);
-    a = fft(a);
-    b = fft(b);
+    fft(a);
+    fft(b);
     for (size_t i = 0; i < m; i++) {
         a[i] *= b[i];
     }
-    a = fft(a);
+    fft(a);
     for (size_t i = 0; i < m; i++) {
         a[i] *= getInverse(T(m));
     }
@@ -199,7 +201,7 @@ template <typename T> class Poly {
     {
         T val = value;
         a[0] += val;
-		return *this;
+        return *this;
     }
 
     Poly &operator-=(const Poly &other) {
@@ -209,21 +211,21 @@ template <typename T> class Poly {
         for (size_t i = 0; i < other.a.size(); i++) {
             a[i] -= other.a[i];
         }
-		return *this;
+        return *this;
     }
 
     Poly &operator*=(const Poly &other) {
-		if (a.size() + other.a.size() < 129) {
-			std::vector<T> result(a.size() + other.a.size() - 1);
-			for (size_t i = 0; i < a.size(); i++) {
-				for (size_t j = 0; j < other.a.size(); j++) {
-					result[i + j] += a[i] * other.a[j];
-				}
-			}
-			a = result;
-		} else {
-			a = convolution(a, other.a);
-		}
+        if (a.size() + other.a.size() < 129) {
+            std::vector<T> result(a.size() + other.a.size() - 1);
+            for (size_t i = 0; i < a.size(); i++) {
+                for (size_t j = 0; j < other.a.size(); j++) {
+                    result[i + j] += a[i] * other.a[j];
+                }
+            }
+            a = result;
+        } else {
+            a = convolution(a, other.a);
+        }
         while (a.size() && a.back() == T{}) {
             a.pop_back();
         }
@@ -259,6 +261,18 @@ template <typename T> class Poly {
         return result;
     }
 
+	Poly binPow(size_t n) {
+		Poly result = 1;
+		Poly base = *this;
+		for (size_t k = 1; k <= n; k <<= 1) {
+			if (k & n) {
+				result *= base;
+			}
+			base *= base;
+		}
+		return result;
+	}
+
     T operator()(T x) {
         T p = 1;
         T result = 0;
@@ -286,13 +300,13 @@ template <typename T> class Poly {
 
 template <typename T> std::ostream &operator<<(std::ostream &out, Poly<T> p) {
     out << "[";
-	for (size_t i = 0; i <= p.deg(); i++) {
-		out << p[i];
-		if (i < p.deg()) {
-			out << ", ";
-		}
-	}
-	return out << "]";
+    for (size_t i = 0; i <= p.deg(); i++) {
+        out << p[i];
+        if (i < p.deg()) {
+            out << ", ";
+        }
+    }
+    return out << "]";
 }
 
 } // namespace math
