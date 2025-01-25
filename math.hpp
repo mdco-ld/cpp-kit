@@ -71,6 +71,8 @@ std::ostream &operator<<(std::ostream &out, ModInt<mod> value) {
     return out << value.val();
 }
 
+// TODO: Fix fft with double
+
 template <typename T> T getRoot(size_t r);
 
 template <> inline ModInt<DEFAULT_PRIME_MOD> getRoot(size_t r) {
