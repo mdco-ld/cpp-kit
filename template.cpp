@@ -12,9 +12,6 @@ using ll = long long;
 #define dbg(...) 42
 #endif
 
-#define makefn(fn) [](auto... args) { return fn(args...); }
-#define constfn(val) []() -> decltype(val) { return val; }
-
 const int MOD = 1e9 + 7;
 
 mt19937 rng(random_device{}());

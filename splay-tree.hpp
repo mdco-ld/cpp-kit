@@ -2,7 +2,7 @@
 #define _MO_SPARSE_TABLE_
 
 #include <algorithm>
-#include <cstdint>
+#include <cstddef>
 
 namespace MO {
 

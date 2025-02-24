@@ -3,6 +3,8 @@
 
 #include <vector>
 
+#include <mo/utils.hpp>
+
 namespace mo {
 
 template <class T, T (*op)(T, T), T (*e)()> class SegmentTree {
