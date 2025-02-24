@@ -3,10 +3,9 @@
 
 #include <cassert>
 #include <vector>
+#include <mo/utils.hpp>
 
-namespace MO {
-
-namespace ds {
+namespace mo {
 
 template <class T, T (*op)(T, T)> struct SparseTable {
     std::vector<std::vector<T>> st;
@@ -30,8 +29,6 @@ template <class T, T (*op)(T, T)> struct SparseTable {
         return op(st[l][L], st[l][R - (1 << l) + 1]);
     }
 };
-
-}; // namespace ds
 
 }; // namespace MO
 
