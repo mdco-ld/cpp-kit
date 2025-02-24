@@ -4,9 +4,9 @@
 #include <algorithm>
 #include <cstddef>
 
-namespace MO {
+#include <mo/utils.hpp>
 
-namespace ds {
+namespace mo {
 
 using std::size_t;
 
@@ -237,8 +237,6 @@ template <typename T, T (*op)(T, T)> class SplayTree {
 
     Node *root;
 };
-
-}; // namespace ds
 
 }; // namespace MO
 

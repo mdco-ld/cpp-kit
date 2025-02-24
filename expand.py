@@ -30,7 +30,7 @@ def mapper(line: str):
 def main(filename):
     lines = open(filename).readlines()
     lines = list(map(mapper, lines))
-    open(filename, 'w').write('\n'.join(lines))
+    open('sol.cpp', 'w').write('\n'.join(lines))
 
 if __name__ == '__main__':
     if len(argv) < 2:
