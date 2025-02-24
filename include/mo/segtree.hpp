@@ -58,6 +58,12 @@ template <class T, T (*op)(T, T), T (*e)()> class SegmentTree {
     }
 };
 
+template<typename T, T e>
+using MaxSegtree = SegmentTree<T, makefn(max), constfn(e)>;
+
+template<typename T, T e>
+using MinSegtree = SegmentTree<T, makefn(min), constfn(e)>;
+
 }; // namespace mo
 
 #endif
