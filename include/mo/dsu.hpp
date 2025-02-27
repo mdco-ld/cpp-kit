@@ -78,31 +78,36 @@ template <> class DSU<nullptr> {
     }
 };
 
+template<typename T>
 class DSURollback {
   private:
     struct Operation {
-        int x;
-        int y;
+        T x;
+        T y;
         int depthX;
     };
-    std::vector<int> parent;
+    std::vector<T> parent;
     std::vector<int> depth;
     std::stack<Operation> changes;
     int n;
 
   public:
-    DSURollback(int n) : n(n), parent(n + 1), depth(n + 1, 0) {
+    DSURollback(int n) : n(n), parent(n + 1), depth(n + 1, T{}) {
         std::iota(parent.begin(), parent.end(), 0);
     }
 
-    int root(int x) {
+    T root(T x) {
         if (parent[x] == x) {
             return x;
         }
         return root(parent[x]);
     }
 
-    bool join(int x, int y) {
+	bool isConnected(T x, T y) {
+		return root(x) == root(y);
+	}
+
+    bool join(T x, T y) {
         x = root(x);
         y = root(y);
         if (x == y) {

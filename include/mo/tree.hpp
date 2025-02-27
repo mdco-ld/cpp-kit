@@ -6,6 +6,7 @@
 
 namespace mo {
 
+template<typename T>
 class Tour {
   private:
     std::vector<int> tin;
@@ -15,26 +16,27 @@ class Tour {
     Tour(std::vector<int> &&tin, std::vector<int> &&tout)
         : tin(tin), tout(tout) {}
 
-    inline int inTimeOf(int u) { return tin[u]; }
+    inline int inTimeOf(T u) { return tin[u]; }
 
-    inline int outTimeOf(int u) { return tout[u]; }
+    inline int outTimeOf(T u) { return tout[u]; }
 };
 
+template<typename T>
 class Tree {
   private:
-    std::vector<std::vector<int>> edges;
+    std::vector<std::vector<T>> edges;
     int n;
 
   public:
     Tree(int n) : n(n), edges(n + 1) {}
 
-    void addEdge(int u, int v) {
+    void addEdge(T u, T v) {
         edges[u].push_back(v);
         edges[v].push_back(u);
     }
 
-    void dfsFrom(int root, std::function<void(int)> inCallback) {
-        std::function<void(int, int)> dfs = [&](int u, int parent) {
+    void dfsFrom(T root, std::function<void(T)> inCallback) {
+        std::function<void(T, T)> dfs = [&](T u, T parent) {
             inCallback(u);
             for (int v : edges[u]) {
                 if (v == parent) {
@@ -45,11 +47,11 @@ class Tree {
         };
     }
 
-    void dfsFrom(int root, std::function<void(int)> inCallback,
-                 std::function<void(int)> outCallback) {
-        std::function<void(int, int)> dfs = [&](int u, int parent) {
+    void dfsFrom(T root, std::function<void(T)> inCallback,
+                 std::function<void(T)> outCallback) {
+        std::function<void(T, T)> dfs = [&](T u, T parent) {
             inCallback(u);
-            for (int v : edges[u]) {
+            for (T v : edges[u]) {
                 if (v == parent) {
                     continue;
                 }
@@ -59,12 +61,12 @@ class Tree {
         dfs(root, -1);
     }
 
-    void dfsFrom(int root, std::function<void(int)> inCallback,
-                 std::function<void(int)> outCallback,
-                 std::function<void(int)> midCallback) {
-        std::function<void(int, int)> dfs = [&](int u, int parent) {
+    void dfsFrom(T root, std::function<void(T)> inCallback,
+                 std::function<void(T)> outCallback,
+                 std::function<void(T)> midCallback) {
+        std::function<void(T, T)> dfs = [&](T u, T parent) {
             inCallback(u);
-            for (int v : edges[u]) {
+            for (T v : edges[u]) {
                 if (v == parent) {
                     continue;
                 }
@@ -76,32 +78,32 @@ class Tree {
         dfs(root, -1);
     }
 
-    Tour tourFrom(int root) {
-        std::vector<int> tin(n);
-        std::vector<int> tout(n);
+    Tour<T> tourFrom(T root) {
+        std::vector<T> tin(n);
+        std::vector<T> tout(n);
         int time = 0;
         dfsFrom(
-            root, [&](int u) { tin[u] = time++; },
-            [&](int u) { tout[u] = time++; });
+            root, [&](T u) { tin[u] = time++; },
+            [&](T u) { tout[u] = time++; });
         return Tour(std::move(tin), std::move(tout));
     }
 
-    Tour tourFrom(int root, std::function<void(int)> inCallback,
-                  std::function<void(int)> outCallback) {
-        std::vector<int> tin(n);
-        std::vector<int> tout(n);
+    Tour<T> tourFrom(T root, std::function<void(T)> inCallback,
+                  std::function<void(T)> outCallback) {
+        std::vector<T> tin(n);
+        std::vector<T> tout(n);
         int time = 0;
         dfsFrom(
             root,
-            [&](int u) {
+            [&](T u) {
                 tin[u] = time++;
                 inCallback(u);
             },
-            [&](int u) {
+            [&](T u) {
                 tout[u] = time++;
                 outCallback(u);
             });
-        return Tour(std::move(tin), std::move(tout));
+        return Tour<T>(std::move(tin), std::move(tout));
     }
 };
 
