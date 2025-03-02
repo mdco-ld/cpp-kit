@@ -17,7 +17,7 @@ template <typename T, typename... TRest> void __dbg(T first, TRest... rest) {
 }
 #define dbg(...)                                                               \
     do {                                                                       \
-        cerr << "DBG> " << "(" << #__VA_ARGS__ << ") = ";                      \
+        std::cerr << "DBG> " << "(" << #__VA_ARGS__ << ") = ";                 \
         __dbg(__VA_ARGS__);                                                    \
     } while (0)
 
