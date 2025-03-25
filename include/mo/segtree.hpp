@@ -16,7 +16,19 @@ template <class T, T (*op)(T, T), T (*e)()> class SegmentTree {
   public:
     SegmentTree() : n(0) {}
 
-    SegmentTree(int N) : n(N), t(2 * N, e()) {}
+    SegmentTree(int N) : n(N), t(2 * N, e()) {
+        for (int i = n; i > 0; i--) {
+            t[i] = op(t[i << 1], t[i << 1 | 1]);
+        }
+    }
+
+    void build(int n) {
+        this->n = n;
+        t.assign(2 * n, e());
+        for (int i = n - 1; i > 0; i--) {
+            t[i] = op(t[i << 1], t[i << 1 | 1]);
+        }
+    }
 
     void build(std::vector<T> &v) {
         n = v.size();
@@ -33,9 +45,7 @@ template <class T, T (*op)(T, T), T (*e)()> class SegmentTree {
         }
     }
 
-	T get(int p) {
-		return t[p + n];
-	}
+    T get(int p) { return t[p + n]; }
 
     void add(int p, T value) {
         p += n;
@@ -45,8 +55,10 @@ template <class T, T (*op)(T, T), T (*e)()> class SegmentTree {
     }
 
     T query(const Interval interval) {
-        auto [l, r] = interval;
-        r++;
+        return query(interval.l, interval.r + 1);
+    }
+
+    T query(int l, int r) {
         T accl = e();
         T accr = e();
         for (l += n, r += n; l < r; l >>= 1, r >>= 1) {
@@ -67,7 +79,7 @@ using MaxSegtree = SegmentTree<T, makefn(std::max), constfn(e)>;
 template <typename T, T e>
 using MinSegtree = SegmentTree<T, makefn(std::min), constfn(e)>;
 
-template<typename T, T e>
+template <typename T, T e>
 using PlusSegtree = SegmentTree<T, makefn(std::plus<T>{}), constfn(e)>;
 
 }; // namespace mo

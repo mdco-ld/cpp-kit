@@ -48,7 +48,11 @@ class LazySegtree {
   public:
     LazySegtree() : n(0) {}
 
-    LazySegtree(int n) : t(2 * n, e()), p(n, id()), n(n) {}
+    LazySegtree(int n) : t(2 * n, e()), p(n, id()), n(n) {
+		for (int i = n - 1; i > 0; i--) {
+			t[i] = op(t[i << 1], t[i << 1 | 1]);
+		}
+	}
 
     void build(std::vector<T> &v) {
         n = v.size();
