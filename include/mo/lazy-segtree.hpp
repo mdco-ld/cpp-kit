@@ -14,7 +14,7 @@ class LazySegtree {
   private:
     std::vector<T> t;
     std::vector<U> p;
-    int n, h;
+    int n;
 
     inline void applyPoint(int i, U f) {
         t[i] = mapping(f, t[i]);
@@ -32,13 +32,14 @@ class LazySegtree {
         p[i] = id();
     }
 
-    void pullAll(int i) {
+    inline void pullAll(int i) {
+        int h = std::__bit_width(i) - 1;
         for (int j = h; j > 0; j--) {
             propagate(i >> j);
         }
     }
 
-    void pushAll(int i) {
+    inline void pushAll(int i) {
         for (i >>= 1; i > 0; i >>= 1) {
             t[i] = mapping(p[i], op(t[i << 1], t[i << 1 | 1]));
         }
@@ -47,20 +48,10 @@ class LazySegtree {
   public:
     LazySegtree() : n(0) {}
 
-    LazySegtree(int n) {
-        h = 0;
-        for (this->n = 1; this->n < n; this->n <<= 1) {
-            h++;
-        }
-        t.assign(2 * this->n, e());
-        p.assign(this->n, id());
-    }
+    LazySegtree(int n) : t(2 * n, e()), p(n, id()), n(n) {}
 
     void build(std::vector<T> &v) {
-        h = 0;
-        for (n = 1; n < v.size(); n <<= 1) {
-            h++;
-        }
+        n = v.size();
         t.assign(2 * n, e());
         p.assign(n, id());
         std::copy(v.begin(), v.end(), t.begin() + n);
@@ -77,9 +68,9 @@ class LazySegtree {
         }
     }
 
-    inline T get(int i) {
-        pullAll(i += n);
-        return t[i];
+    T get(int i) {
+        pullAll(i + n);
+        return t[i + n];
     }
 
     inline void apply(Interval interval, U f) {
@@ -89,8 +80,6 @@ class LazySegtree {
     void apply(int l, int r, U f) {
         int L = l += n;
         int R = r += n;
-		pullAll(L);
-		pullAll(R - 1);
         for (; l < r; l >>= 1, r >>= 1) {
             if (l & 1) {
                 applyPoint(l++, f);
@@ -108,10 +97,10 @@ class LazySegtree {
     }
 
     T query(int l, int r) {
-        pullAll(l + n);
-        pullAll(r + n - 1);
         T accL = e();
         T accR = e();
+        pullAll(l + n);
+        pullAll(r + n - 1);
         for (l += n, r += n; l < r; l >>= 1, r >>= 1) {
             if (l & 1) {
                 accL = op(accL, t[l++]);
