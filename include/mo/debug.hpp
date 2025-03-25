@@ -2,15 +2,46 @@
 #define _MO_DEBUG_HPP_
 
 #include <iostream>
+#include <set>
 #include <vector>
+#include <map>
 
 template <typename T> void __dbg2(T t) { std::cerr << t; }
 template <> inline void __dbg2(bool t) { std::cerr << (t ? "true" : "false"); }
-template<typename T> void __dbg2(std::vector<T> &v) {
+template <typename T> void __dbg2(std::vector<T> &v) {
+    std::cerr << "[";
+    for (int i = 0; i < v.size(); i++) {
+		__dbg2(v[i]);
+        if (i + 1 < v.size()) {
+            std::cerr << ", ";
+        }
+    }
+    std::cerr << "]";
+}
+template <typename T> void __dbg2(std::set<T> &st) {
+    std::cerr << "[";
+    int cnt = 0;
+    for (auto &item : st) {
+        cnt++;
+		__dbg2(item);
+        if (cnt < st.size()) {
+            std::cerr << ", ";
+        }
+    }
+    std::cerr << "]";
+}
+template<typename K, typename V>
+void __dbg2(std::map<K, V> &mp) {
 	std::cerr << "[";
-	for (int i = 0; i < v.size(); i++) {
-		std::cerr << v[i];
-		if (i + 1 < v.size()) {
+	int cnt = 0;
+	for (auto &[k, v]: mp) {
+		cnt++;
+		std::cerr << "{";
+		__dbg2(k);
+		std::cerr << " -> ";
+		__dbg2(v);
+		std::cerr << "}";
+		if (cnt < mp.size()) {
 			std::cerr << ", ";
 		}
 	}

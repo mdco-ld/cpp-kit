@@ -1,6 +1,7 @@
 #ifndef _MO_SEGMENT_TREE_HPP_
 #define _MO_SEGMENT_TREE_HPP_
 
+#include <algorithm>
 #include <vector>
 
 #include <mo/utils.hpp>
@@ -19,11 +20,7 @@ template <class T, T (*op)(T, T), T (*e)()> class SegmentTree {
 
     void build(std::vector<T> &v) {
         n = v.size();
-        t.clear();
-        t.reserve(2 * n);
-        for (int i = 0; i < 2 * n; i++) {
-            t.push_back(e());
-        }
+        t.assign(2 * n, e());
         std::copy(v.begin(), v.end(), t.begin() + n);
         for (int i = n - 1; i > 0; i--) {
             t[i] = op(t[i << 1], t[i << 1 | 1]);
@@ -36,6 +33,10 @@ template <class T, T (*op)(T, T), T (*e)()> class SegmentTree {
         }
     }
 
+	T get(int p) {
+		return t[p + n];
+	}
+
     void add(int p, T value) {
         p += n;
         for (t[p] = op(t[p], value); p > 1; p >>= 1) {
@@ -43,7 +44,9 @@ template <class T, T (*op)(T, T), T (*e)()> class SegmentTree {
         }
     }
 
-    T query(int l, int r) {
+    T query(const Interval interval) {
+        auto [l, r] = interval;
+        r++;
         T accl = e();
         T accr = e();
         for (l += n, r += n; l < r; l >>= 1, r >>= 1) {
@@ -58,11 +61,14 @@ template <class T, T (*op)(T, T), T (*e)()> class SegmentTree {
     }
 };
 
-template<typename T, T e>
-using MaxSegtree = SegmentTree<T, makefn(max), constfn(e)>;
+template <typename T, T e>
+using MaxSegtree = SegmentTree<T, makefn(std::max), constfn(e)>;
+
+template <typename T, T e>
+using MinSegtree = SegmentTree<T, makefn(std::min), constfn(e)>;
 
 template<typename T, T e>
-using MinSegtree = SegmentTree<T, makefn(min), constfn(e)>;
+using PlusSegtree = SegmentTree<T, makefn(std::plus<T>{}), constfn(e)>;
 
 }; // namespace mo
 
