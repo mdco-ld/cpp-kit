@@ -14,20 +14,14 @@ template <class T, T (*op)(T, T), T (*e)()> class SegmentTree {
     int n;
 
   public:
-    SegmentTree() : n(0) {}
+    SegmentTree() {}
 
     SegmentTree(int N) : n(N), t(2 * N, e()) {
-        for (int i = n; i > 0; i--) {
-            t[i] = op(t[i << 1], t[i << 1 | 1]);
-        }
     }
 
     void build(int n) {
         this->n = n;
         t.assign(2 * n, e());
-        for (int i = n - 1; i > 0; i--) {
-            t[i] = op(t[i << 1], t[i << 1 | 1]);
-        }
     }
 
     void build(std::vector<T> &v) {
