@@ -1,9 +1,10 @@
 #ifndef _MO_SPARSE_TABLE_
 #define _MO_SPARSE_TABLE_
 
+#include <mo/utils.hpp>
+
 #include <cassert>
 #include <vector>
-#include <mo/utils.hpp>
 
 namespace mo {
 
@@ -11,6 +12,7 @@ template <class T, T (*op)(T, T)> struct SparseTable {
     std::vector<std::vector<T>> st;
     int k;
     int n;
+    SparseTable() {}
     SparseTable(std::vector<T> &v) {
         assert(v.size() > 0);
         k = std::__bit_width(v.size()) - 1;
@@ -23,6 +25,7 @@ template <class T, T (*op)(T, T)> struct SparseTable {
             }
         }
     }
+    void build(std::vector<T> &v) { *this = SparseTable(v); }
     T query(int L, int R) {
         assert(L <= R);
         int l = std::__bit_width(R - L + 1) - 1;
@@ -30,6 +33,10 @@ template <class T, T (*op)(T, T)> struct SparseTable {
     }
 };
 
-}; // namespace MO
+template <typename T> using MinSparseTable = SparseTable<T, makefn(std::min)>;
+
+template <typename T> using MaxSparseTable = SparseTable<T, makefn(std::max)>;
+
+}; // namespace mo
 
 #endif
