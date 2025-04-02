@@ -8,6 +8,13 @@
 
 template <typename T> void __dbg2(T t) { std::cerr << t; }
 template <> inline void __dbg2(bool t) { std::cerr << (t ? "true" : "false"); }
+template<typename T, typename U> void __dbg2(std::pair<T, U> p) {
+	std::cerr << "(";
+	__dbg2(p.first);
+	std::cerr << ", ";
+	__dbg2(p.second);
+	std::cerr << ")";
+}
 template <typename T> void __dbg2(std::vector<T> &v) {
     std::cerr << "[";
     for (int i = 0; i < v.size(); i++) {
