@@ -1,6 +1,7 @@
 #ifndef _MO_MATH_MATRIX_HPP_
 #define _MO_MATH_MATRIX_HPP_
 
+#include <array>
 #include <mo/math/group.hpp>
 #include <mo/math/monoid.hpp>
 #include <mo/math/ring.hpp>
@@ -106,6 +107,10 @@ template <Monoid T> class DynMatrix {
 
     inline int cols() { return m; }
 
+    inline std::vector<typename T::ValueType> &operator[](int i) {
+        return values[i];
+    }
+
   private:
     std::vector<std::vector<typename T::ValueType>> values;
     int n;
@@ -204,8 +209,15 @@ template <Monoid T, int N, int M = N> class Matrix {
         return result;
     }
 
+    std::array<typename T::ValueType, M> &operator[](int i) {
+        return values[i];
+    }
+
+    constexpr int rows() { return N; }
+    constexpr int cols() { return M; }
+
   private:
-    T::ValueType values[N][M];
+    std::array<std::array<typename T::ValueType, M>, N> values;
 };
 
 }; // namespace math
