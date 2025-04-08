@@ -102,6 +102,10 @@ template <Monoid T> class DynMatrix {
         return result;
     }
 
+    inline int rows() { return n; }
+
+    inline int cols() { return m; }
+
   private:
     std::vector<std::vector<typename T::ValueType>> values;
     int n;
