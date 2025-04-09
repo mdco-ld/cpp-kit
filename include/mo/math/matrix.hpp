@@ -103,9 +103,9 @@ template <Monoid T> class DynMatrix {
         return result;
     }
 
-    inline int rows() { return n; }
+    inline int rows() const { return n; }
 
-    inline int cols() { return m; }
+    inline int cols() const { return m; }
 
     inline std::vector<typename T::ValueType> &operator[](int i) {
         return values[i];
@@ -213,8 +213,8 @@ template <Monoid T, int N, int M = N> class Matrix {
         return values[i];
     }
 
-    constexpr int rows() { return N; }
-    constexpr int cols() { return M; }
+    constexpr int rows() const { return N; }
+    constexpr int cols() const { return M; }
 
   private:
     std::array<std::array<typename T::ValueType, M>, N> values;

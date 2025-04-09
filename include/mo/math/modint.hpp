@@ -1,6 +1,7 @@
 #ifndef _MO_MATH_MODINT_HPP_
 #define _MO_MATH_MODINT_HPP_
 
+#include <cassert>
 #include <concepts>
 #include <cstdint>
 #include <tuple>
@@ -43,6 +44,7 @@ template <int64_t MOD> class ModInt {
         return value * other.value;
     }
     constexpr inline ModInt operator/(ModInt other) {
+        assert(value != 0);
         return (*this) * other.inverse();
     }
     constexpr inline ModInt operator-() { return -value; }
@@ -53,17 +55,17 @@ template <int64_t MOD> class ModInt {
         return x;
     }
 
-    ModInt inline &operator+=(ModInt other) {
+    inline ModInt &operator+=(ModInt other) {
         value += other.value;
         value %= MOD;
         return *this;
     }
-    ModInt inline &operator*=(ModInt other) {
+    inline ModInt &operator*=(ModInt other) {
         value *= other.value;
         value %= MOD;
         return *this;
     }
-    ModInt inline &operator-=(ModInt other) {
+    inline ModInt &operator-=(ModInt other) {
         value -= other.value;
         value %= MOD;
         if (value < 0) {
@@ -71,20 +73,83 @@ template <int64_t MOD> class ModInt {
         }
         return *this;
     }
-    ModInt inline &operator/=(ModInt other) {
+    inline ModInt &operator/=(ModInt other) {
         return *this = (*this) * other.inverse();
+    }
+
+    constexpr inline bool operator==(ModInt other) {
+        return value == other.value;
+    }
+
+    constexpr inline bool operator!=(ModInt other) {
+        return value != other.value;
     }
 
   private:
     int64_t value;
 };
 
+template <> class ModInt<2> {
+  public:
+    constexpr ModInt() : value(0) {}
+    constexpr ModInt(int64_t x) {
+        if (x < 0) {
+            x = -x;
+        }
+        x &= 1;
+        value = x;
+    }
+
+    constexpr inline ModInt operator+(ModInt other) {
+        return value ^ other.value;
+    }
+    constexpr inline ModInt operator-(ModInt other) {
+        return value ^ other.value;
+    }
+    constexpr inline ModInt operator*(ModInt other) {
+        return value & other.value;
+    }
+    constexpr inline ModInt operator/(ModInt other) {
+        return (*this) * other.inverse();
+    }
+    constexpr inline ModInt operator-() { return -value; }
+    constexpr inline int64_t toInt() { return value; }
+    constexpr inline ModInt inverse() {
+        assert(value != 0);
+        return value;
+    }
+
+    inline ModInt &operator+=(ModInt other) {
+        value ^= other.value;
+        return *this;
+    }
+    inline ModInt &operator*=(ModInt other) {
+        value &= other.value;
+        return *this;
+    }
+    inline ModInt &operator-=(ModInt other) {
+        value ^= other.value;
+        return *this;
+    }
+    inline ModInt &operator/=(ModInt other) {
+        return *this = (*this) * other.inverse();
+    }
+
+    constexpr inline bool operator==(ModInt other) {
+        return value == other.value;
+    }
+
+    constexpr inline bool operator!=(ModInt other) {
+        return value != other.value;
+    }
+
+  private:
+    int8_t value;
+};
+
 using ModInt998244353 = ModInt<998244353>;
 using ModInt1000000007 = ModInt<1000000007>;
-
-namespace tests {
-
-}; // namespace tests
+using ModInt2 = ModInt<2>;
 
 }; // namespace math
 
