@@ -23,8 +23,9 @@ template <typename T, bool oneBased = true> class Tree {
     }
 
     std::vector<T> &operator[](T v) { return edges[v]; }
+    const std::vector<T> &operator[](T v) const { return edges[v]; }
 
-    inline int64_t size() { return n; }
+    inline int64_t size() const { return n; }
 
     void preOrderDfs(T start, std::function<void(T, T)> visit) {
         std::function<void(T, T)> dfs_ = [&](T v, T par) {

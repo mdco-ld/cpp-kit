@@ -10,7 +10,7 @@ namespace tree {
 
 template <typename T, bool oneBased> class LCA {
   private:
-    Tree<T, oneBased> &t;
+    const Tree<T, oneBased> &t;
     T r;
     std::vector<int64_t> lcaTin;
     std::vector<int64_t> lcaTout;
@@ -46,9 +46,9 @@ template <typename T, bool oneBased> class LCA {
     }
 
   public:
-    LCA(Tree<T, oneBased> &tree, T root) : t(tree), r(root) { prepareLCA(); }
+    LCA(const Tree<T, oneBased> &tree, T root) : t(tree), r(root) { prepareLCA(); }
 
-    T lca(T u, T v) {
+    T operator()(T u, T v) {
         return lcaArray
             .query(std::min(lcaTin[u], lcaTin[v]),
                    std::max(lcaTout[u], lcaTout[v]))
