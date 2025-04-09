@@ -3,7 +3,6 @@
 
 #include <mo/utils.hpp>
 
-#include <cassert>
 #include <vector>
 
 namespace mo {
@@ -14,7 +13,6 @@ template <class T, T (*op)(T, T)> struct SparseTable {
     int n;
     SparseTable() {}
     SparseTable(std::vector<T> &v) {
-        assert(v.size() > 0);
         k = std::__bit_width(v.size()) - 1;
         n = v.size();
         st.assign(k + 1, std::vector<T>(v.size()));
@@ -27,7 +25,6 @@ template <class T, T (*op)(T, T)> struct SparseTable {
     }
     void build(std::vector<T> &v) { *this = SparseTable(v); }
     T query(int L, int R) {
-        assert(L <= R);
         int l = std::__bit_width(R - L + 1) - 1;
         return op(st[l][L], st[l][R - (1 << l) + 1]);
     }

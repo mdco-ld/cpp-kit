@@ -3,7 +3,6 @@
 
 #include <mo/math/sieve.hpp>
 
-#include <cassert>
 #include <cstddef>
 #include <cstdint>
 #include <vector>
@@ -34,7 +33,6 @@ template <typename T> void subsetFastMobius(std::vector<T> &v) {
 
 template <typename T> void supersetFastZeta(std::vector<T> &v) {
     size_t n = v.size();
-    assert(!(n & (n - 1)));
     for (int64_t j = 1; j < n; j <<= 1) {
         for (int64_t i = 1; i < n; i++) {
             if (i & j) {

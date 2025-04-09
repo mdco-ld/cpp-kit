@@ -7,7 +7,6 @@
 #include <mo/math/ring.hpp>
 #include <mo/math/semiring.hpp>
 
-#include <cassert>
 #include <cstdint>
 #include <vector>
 
@@ -20,13 +19,11 @@ template <Monoid T> class DynMatrix {
     DynMatrix(int N, int M)
         : values(N, std::vector<typename T::ValueType>(M, T::zero())), n(N),
           m(M), isSquare(N == M) {
-        assert(n > 0 && m > 0);
     }
 
     static DynMatrix identity(int n)
         requires(Semiring<T>)
     {
-        assert(n > 0);
         DynMatrix result(n, n);
         for (int i = 0; i < n; i++) {
             result.values[i][i] = T::one();
@@ -35,7 +32,6 @@ template <Monoid T> class DynMatrix {
     }
 
     DynMatrix operator+(const DynMatrix &other) const {
-        assert(n == other.n && m == other.m);
         DynMatrix result(n, m);
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
@@ -48,7 +44,6 @@ template <Monoid T> class DynMatrix {
     DynMatrix operator-(const DynMatrix &other) const
         requires(Group<T>)
     {
-        assert(n == other.n && m == other.m);
         DynMatrix result(n, m);
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
@@ -74,7 +69,6 @@ template <Monoid T> class DynMatrix {
     DynMatrix operator*(const DynMatrix &other) const
         requires(Semiring<T>)
     {
-        assert(m == other.n);
         DynMatrix result(n, other.m);
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < other.m; j++) {
@@ -90,7 +84,6 @@ template <Monoid T> class DynMatrix {
     DynMatrix pow(int64_t e) const
         requires(Semiring<T>)
     {
-        assert(isSquare);
         DynMatrix result = identity(n);
         DynMatrix base = *this;
         while (e > 0) {

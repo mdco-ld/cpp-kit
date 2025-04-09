@@ -1,7 +1,6 @@
 #ifndef _MO_MATH_MODINT_HPP_
 #define _MO_MATH_MODINT_HPP_
 
-#include <cassert>
 #include <concepts>
 #include <cstdint>
 #include <tuple>
@@ -44,7 +43,6 @@ template <int64_t MOD> class ModInt {
         return value * other.value;
     }
     constexpr inline ModInt operator/(ModInt other) {
-        assert(value != 0);
         return (*this) * other.inverse();
     }
     constexpr inline ModInt operator-() { return -value; }
@@ -115,7 +113,6 @@ template <> class ModInt<2> {
     constexpr inline ModInt operator-() { return -value; }
     constexpr inline int64_t toInt() { return value; }
     constexpr inline ModInt inverse() {
-        assert(value != 0);
         return value;
     }
 
