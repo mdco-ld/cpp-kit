@@ -25,6 +25,9 @@ struct Interval {
         return !isEmpty() && (other.isEmpty() || l <= other.l && r >= other.r);
     }
     inline bool contains(int64_t value) { return l <= value && value <= r; }
+    inline static Interval around(int64_t point, int64_t distance) {
+        return Interval{point - distance, point + distance};
+    }
 };
 
 }; // namespace mo
