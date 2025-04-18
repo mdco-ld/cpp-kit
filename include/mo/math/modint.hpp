@@ -33,21 +33,21 @@ template <int64_t MOD> class ModInt {
         }
     }
 
-    constexpr inline ModInt operator+(ModInt other) {
+    constexpr inline ModInt operator+(ModInt other) const {
         return value + other.value;
     }
-    constexpr inline ModInt operator-(ModInt other) {
+    constexpr inline ModInt operator-(ModInt other) const {
         return value - other.value;
     }
-    constexpr inline ModInt operator*(ModInt other) {
+    constexpr inline ModInt operator*(ModInt other) const {
         return value * other.value;
     }
-    constexpr inline ModInt operator/(ModInt other) {
+    constexpr inline ModInt operator/(ModInt other) const {
         return (*this) * other.inverse();
     }
-    constexpr inline ModInt operator-() { return -value; }
-    constexpr inline int64_t toInt() { return value; }
-    constexpr ModInt inverse() {
+    constexpr inline ModInt operator-() const { return -value; }
+    constexpr inline int64_t toInt() const { return value; }
+    constexpr ModInt inverse() const {
         int64_t x, y;
         extendedEuclid(value, MOD, x, y);
         return x;
@@ -75,11 +75,11 @@ template <int64_t MOD> class ModInt {
         return *this = (*this) * other.inverse();
     }
 
-    constexpr inline bool operator==(ModInt other) {
+    constexpr inline bool operator==(ModInt other) const {
         return value == other.value;
     }
 
-    constexpr inline bool operator!=(ModInt other) {
+    constexpr inline bool operator!=(ModInt other) const {
         return value != other.value;
     }
 
