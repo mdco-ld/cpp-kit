@@ -4,6 +4,7 @@ from sys import argv
 import os
 
 IGNORED_FILES = {'debug.hpp'}
+expanded_files = set()
 
 def is_local_include(line: str):
     if line.startswith('#include <mo/') and line.endswith('>\n'):
@@ -23,6 +24,9 @@ def get_local_include_file(line: str):
 def mapper(line: str):
     if not is_local_include(line):
         return line.rstrip()
+    if line in expanded_files:
+        return ''
+    expanded_files.add(line)
     lines = get_local_include_file(line)
     lines = list(map(mapper, lines))
     return '\n'.join(lines)
