@@ -33,13 +33,14 @@ template <Field F>
 std::vector<typename F::ValueType> fft(std::vector<typename F::ValueType> v) {
 	// TODO: Stop begin lazy and optimize this FFT
     using T = typename F::ValueType;
+	using BaseType = typename F::BaseType;
     int m = v.size();
     if (m == 1) {
         return v;
     }
     T omega = F::zero();
-    if constexpr (std::same_as<T, ModInt998244353>) {
-        omega = internal::get2toNthRoot(std::__bit_width(m) - 1);
+    if constexpr (std::same_as<BaseType, ModInt998244353>) {
+        omega = F::make(internal::get2toNthRoot(std::__bit_width(m) - 1));
     } else if constexpr (std::same_as<T, double>) {
         static_assert(false); // TODO: Implement this
     } else {

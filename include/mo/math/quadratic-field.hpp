@@ -10,8 +10,13 @@ namespace mo {
 namespace math {
 
 template <Field F, F::ValueType (*squareFn)()> struct QuadraticField {
-    using BaseType = typename F::ValueType;
-    using ValueType = std::tuple<BaseType, BaseType>;
+    using MemberType = typename F::ValueType;
+    using ValueType = std::tuple<MemberType, MemberType>;
+    using BaseType = typename F::BaseType;
+
+    constexpr inline static ValueType make(BaseType value) {
+        return std::make_tuple(F::make(value), F::zero());
+    }
     constexpr inline static ValueType zero() {
         return std::make_tuple(F::zero(), F::zero());
     }
