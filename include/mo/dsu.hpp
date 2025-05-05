@@ -7,63 +7,27 @@
 
 namespace mo {
 
-template <void (*onJoin)(int, int) = nullptr> class DSU {
+template <class T = int> class DSU {
   private:
-    std::vector<int> parent;
+    std::vector<T> parent;
     std::vector<int> cnt;
     int n;
 
   public:
-    DSU(int n) : n(n), parent(n + 1), cnt(n + 1, 1) {
-        std::iota(parent.begin(), parent.end(), 0);
+    DSU(int n) : n(n), parent(n + 1), cnt(n + 1, T{1}) {
+        std::iota(parent.begin(), parent.end(), T{0});
     }
 
-    inline int getCnt(int x) { return cnt[x]; }
+    inline int &getCnt(T x) { return cnt[x]; }
 
-    int root(int x) {
+    T root(T x) {
         if (parent[x] == x) {
             return x;
         }
         return parent[x] = root(parent[x]);
     }
 
-    bool join(int x, int y) {
-        x = root(x);
-        y = root(y);
-        if (x == y) {
-            return false;
-        }
-        if (cnt[x] < cnt[y]) {
-            std::swap(x, y);
-        }
-        onJoin(x, y);
-        cnt[x] += cnt[y];
-        parent[y] = x;
-        return true;
-    }
-};
-
-template <> class DSU<nullptr> {
-  private:
-    std::vector<int> parent;
-    std::vector<int> cnt;
-    int n;
-
-  public:
-    DSU(int n) : n(n), parent(n + 1), cnt(n + 1, 1) {
-        std::iota(parent.begin(), parent.end(), 0);
-    }
-
-    inline int getCnt(int x) { return cnt[x]; }
-
-    int root(int x) {
-        if (parent[x] == x) {
-            return x;
-        }
-        return parent[x] = root(parent[x]);
-    }
-
-    bool join(int x, int y) {
+    bool join(T x, T y) {
         x = root(x);
         y = root(y);
         if (x == y) {
@@ -78,7 +42,7 @@ template <> class DSU<nullptr> {
     }
 };
 
-template<typename T>
+template<typename T = int>
 class DSURollback {
   private:
     struct Operation {
@@ -139,16 +103,17 @@ class DSURollback {
     }
 };
 
+template<typename T = int>
 class DSU2D {
   private:
-    std::vector<std::vector<std::pair<int, int>>> parent;
+    std::vector<std::vector<std::pair<T, T>>> parent;
     std::vector<std::vector<int>> cnt;
     int n;
     int m;
 
   public:
     DSU2D(int n, int m)
-        : n(n), m(m), parent(n + 1, std::vector<std::pair<int, int>>(m + 1)),
+        : n(n), m(m), parent(n + 1, std::vector<std::pair<T, T>>(m + 1)),
           cnt(n + 1, std::vector<int>(m + 1, 1)) {
         for (int i = 1; i <= n; i++) {
             for (int j = 1; j <= m; j++) {
@@ -157,14 +122,14 @@ class DSU2D {
         }
     }
 
-    std::pair<int, int> root(std::pair<int, int> x) {
+    std::pair<T, T> root(std::pair<T, T> x) {
         if (parent[x.first][x.second] == x) {
             return x;
         }
         return parent[x.first][x.second] = root(parent[x.first][x.second]);
     }
 
-    bool join(std::pair<int, int> x, std::pair<int, int> y) {
+    bool join(std::pair<T, T> x, std::pair<T, T> y) {
         x = root(x);
         y = root(y);
         if (x == y) {
