@@ -34,7 +34,7 @@ template <Field F> void fft(std::vector<typename F::ValueType> &v) {
     using BaseType = typename F::BaseType;
     int m = v.size();
     if (m == 1) {
-		return;
+        return;
     }
     T omega = F::zero();
     if constexpr (std::same_as<BaseType, ModInt998244353>) {

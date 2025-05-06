@@ -170,7 +170,7 @@ template <Field F> class Polynomial {
         return false;
     }
 
-    inline int deg() const { return std::max(n - 1, 0); }
+    inline int deg() const { return std::max(n - 1, decltype(n){0}); }
 
     inline ValueType coef(int i) const { 
 		if (i >= n) {
