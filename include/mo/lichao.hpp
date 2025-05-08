@@ -6,7 +6,7 @@
 
 namespace mo {
 
-template <typename T = int> class LiChao {
+template <typename T = long long> class LiChao {
   public:
     struct Line {
 		T a;
