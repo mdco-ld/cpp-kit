@@ -17,7 +17,7 @@ def get_local_include_file(line: str):
     filename = line[len('#include <mo/'):-2]
     if filename in IGNORED_FILES:
         return '\n'
-    filepath = os.path.join(os.getenv('MO_LIBRARY_PATH'), 'mo', filename)
+    filepath = os.path.join(os.getenv('MO_CPP_PATH'), 'mo', filename)
     contents = open(filepath).readlines()
     return contents
 
