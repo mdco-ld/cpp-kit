@@ -17,6 +17,7 @@ def get_local_include_file(line: str):
     filename = line[len('#include <mo/'):-2]
     if filename in IGNORED_FILES:
         return '\n'
+    print(f'Expanding {filename}')
     filepath = os.path.join(os.getenv('MO_CPP_PATH'), 'mo', filename)
     contents = open(filepath).readlines()
     return contents
@@ -34,6 +35,7 @@ def mapper(line: str):
 def main(filename):
     lines = open(filename).readlines()
     lines = list(map(mapper, lines))
+    print('Writing to sol.cpp')
     open('sol.cpp', 'w').write('\n'.join(lines))
 
 if __name__ == '__main__':
