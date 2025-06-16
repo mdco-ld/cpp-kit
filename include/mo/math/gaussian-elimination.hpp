@@ -59,6 +59,9 @@ void gaussianElimination(DynMatrix<F> &mat,
     }
 }
 
+/**
+ * Performs inline gaussian elimination
+ */
 template <Field F, int N, int M>
 void gaussianElimination(Matrix<F, N, M> &mat,
                          std::vector<typename F::ValueType> &v) {

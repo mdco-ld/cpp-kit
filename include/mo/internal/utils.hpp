@@ -4,67 +4,12 @@
 #include <mo/internal/concepts/group.hpp>
 #include <mo/internal/concepts/monoid.hpp>
 #include <mo/internal/concepts/semigroup.hpp>
+#include <mo/internal/numeric.hpp>
 
 #include <algorithm>
 #include <limits>
-#include <type_traits>
-#include <utility>
-#include <bit>
 
 namespace mo::internal::utils {
-
-namespace impl {
-
-template <typename Int>
-concept Integral = std::is_integral_v<Int> || std::is_same_v<Int, __int128>;
-
-using ull = unsigned long long;
-
-template <typename Int>
-    requires Integral<Int>
-constexpr Int gcd(Int a, Int b) {
-    if (a < 0) {
-        a = -a;
-    }
-    if (b < 0) {
-        b = -b;
-    }
-    while (b) {
-        a %= b;
-        std::swap(a, b);
-    }
-    return a;
-}
-
-template <typename Int>
-    requires Integral<Int>
-constexpr Int lcm(Int a, Int b) {
-    a /= gcd(a, b);
-    return a * b;
-}
-
-template <typename Int>
-    requires std::is_integral_v<Int>
-constexpr inline int popcount(Int x) {
-    return std::popcount(static_cast<ull>(x));
-}
-
-template <typename Int>
-    requires std::is_integral_v<Int>
-constexpr inline int bitWidth(Int x) {
-    return std::bit_width(static_cast<ull>(x));
-}
-
-/**
- * returns floor(log2(x))
- */
-template <typename Int>
-    requires std::is_integral_v<Int>
-constexpr inline int log2(Int x) {
-    return bitWidth(x) - 1;
-}
-
-}; // namespace impl
 
 namespace traits {
 
@@ -99,10 +44,10 @@ template <class Int> struct GcdMonoid {
     GcdMonoid() : value(Int{0}) {}
     GcdMonoid(Int val) : value(val) {}
     GcdMonoid operator+(const GcdMonoid other) const {
-        return impl::gcd(value, other.value);
+        return numeric::gcd(value, other.value);
     }
     GcdMonoid &operator+=(const GcdMonoid other) {
-        value = impl::gcd(value, other.value);
+        value = numeric::gcd(value, other.value);
         return *this;
     }
 };
@@ -112,18 +57,33 @@ template <class Int> struct LcmMonoid {
     LcmMonoid() : value(Int{0}) {}
     LcmMonoid(Int val) : value(val) {}
     LcmMonoid operator+(const LcmMonoid other) const {
-        return impl::lcm(value, other.value);
+        return numeric::lcm(value, other.value);
     }
     LcmMonoid &operator+=(const LcmMonoid other) {
-        value = impl::lcm(value, other.value);
+        value = numeric::lcm(value, other.value);
         return *this;
     }
+};
+
+template<class T> struct ProductMonoid {
+	T value;
+	ProductMonoid() requires numeric::Integral<T> : value(T{1}) {}
+	ProductMonoid() requires (!numeric::Integral<T>) : value(T{}) {}
+	ProductMonoid(T val) : value(val) {}
+	ProductMonoid operator+(const ProductMonoid other) const {
+		return value * other.value;
+	}
+	ProductMonoid &operator+=(const ProductMonoid other) {
+		value *= other.value;
+		return *this;
+	}
 };
 
 static_assert(internal::traits::Monoid<MaxMonoid<int>>);
 static_assert(internal::traits::Monoid<MinMonoid<int>>);
 static_assert(internal::traits::Monoid<GcdMonoid<int>>);
 static_assert(internal::traits::Monoid<LcmMonoid<int>>);
+static_assert(internal::traits::Monoid<ProductMonoid<int>>);
 
 }; // namespace traits
 

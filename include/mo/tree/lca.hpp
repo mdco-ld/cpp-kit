@@ -4,6 +4,8 @@
 #include <mo/tree/tree.hpp>
 #include <mo/sparse-table.hpp>
 
+#include <functional>
+
 namespace mo {
 
 namespace tree {
