@@ -2,7 +2,8 @@
 #define _MO_INTERNAL_SIEVE_HPP_
 
 #include <vector>
-namespace mo::internal {
+
+namespace mo::internal::sieve {
 
 class LinearSieve {
   public:
@@ -32,6 +33,6 @@ class LinearSieve {
     std::vector<int> spf;
 };
 
-}; // namespace mo::internal
+}; // namespace mo::internal::sieve
 
 #endif

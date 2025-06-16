@@ -1,7 +1,7 @@
 #ifndef _MO_BIT_CONVOLUTION_HPP_
 #define _MO_BIT_CONVOLUTION_HPP_
 
-#include <mo/zeta.hpp>
+#include <mo/internal/zeta.hpp>
 #include <vector>
 #include <span>
 
