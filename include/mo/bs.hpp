@@ -1,41 +1,32 @@
 #ifndef _MO_BINARY_SEARCH_HPP_
 #define _MO_BINARY_SEARCH_HPP_
 
-#include <type_traits>
+#include <mo/internal/binary-search.hpp>
 
 namespace mo {
 
-template <typename T>
-    requires(std::is_integral<T>::value)
-void bs(T &l, T &r, auto f) {
-    while (r - l > 1) {
-        T mid = l + (r - l) / 2;
-        if (f(mid)) {
-            r = mid;
-        } else {
-            l = mid;
-        }
+template <class T>
+    requires std::is_integral_v<T>
+inline void bs(T &l, T &r, auto f) {
+    if (l > r) {
+        swap(l, r);
+        auto f_ = [&](T i) -> bool { return !f(i); };
+        mo::internal::binarySearch(l, r, f_);
+    } else {
+        mo::internal::binarySearch(l, r, f);
     }
 }
 
-template <typename T>
-    requires(std::is_integral<T>::value)
-void bs(T &l, T &r, T step, auto f) {
-    assert((r - l) % step == 0);
-    int base = l;
-    l = 0;
-    r -= base;
-    r /= step;
-    while (r - l > 1) {
-        T mid = l + (r - l) / 2;
-        if (f(base + mid * step)) {
-            r = mid;
-        } else {
-            l = mid;
-        }
-    }
-    l = step * l + base;
-    r = step * r + base;
+template <class T>
+    requires std::is_integral_v<T>
+inline void bs(T &l, T &r, T step, auto f) {
+	if (l > r) {
+		swap(l, r);
+		auto f_ = [&](T i) -> bool { return !f(i); };
+		mo::internal::binarySearch(l, r, step, f_);
+	} else {
+		mo::internal::binarySearch(l, r, step, f);
+	}
 }
 
 }; // namespace mo
