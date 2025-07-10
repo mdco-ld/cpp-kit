@@ -57,45 +57,45 @@ template <traits::Monoid S> class FenwickTree {
         return prefixSum(r) - prefixSum(l - 1);
     }
 
-	/**
-	 * Finds the largest prefix that is less than value.
-	 * Uses operator<(S, S).
-	 * `O(log(N))`
-	 */
-	int bisect(S value) {
-		int k = 0;
-		S acc{};
-		for (int i = numeric::bitWidth(n) - 1; i >= 0; i--) {
-			if (k + (1 << i) > n) {
-				continue;
-			}
-			if (acc + t[k + (1 << i)] < value) {
-				k += 1 << i;
-				acc += t[k];
-			}
-		}
-		return k;
-	}
+    /**
+     * Finds the largest prefix that is less than value.
+     * Uses operator<(S, S).
+     * `O(log(N))`
+     */
+    int bisect(S value) {
+        int k = 0;
+        S acc{};
+        for (int i = numeric::bitWidth(n) - 1; i >= 0; i--) {
+            if (k + (1 << i) > n) {
+                continue;
+            }
+            if (acc + t[k + (1 << i)] < value) {
+                k += 1 << i;
+                acc += t[k];
+            }
+        }
+        return k;
+    }
 
-	/**
-	 * Finds largest prefix that satisfies some condition.
-	 * Assumes the prefixes of the tree are partitioned by f at some point.
-	 * `O(log(N))`
-	 */
-	int bisect(auto f) {
-		int k = 0;
-		S acc{};
-		for (int i = numeric::bitWidth(n) - 1; i >= 0; i--) {
-			if (k + (1 << i) > n) {
-				continue;
-			}
-			if (f(acc + t[k + (1 << i)])) {
-				k += 1 << i;
-				acc += t[k];
-			}
-		}
-		return k;
-	}
+    /**
+     * Finds largest prefix that satisfies some condition.
+     * Assumes the prefixes of the tree are partitioned by f at some point.
+     * `O(log(N))`
+     */
+    int bisect(auto f) {
+        int k = 0;
+        S acc{};
+        for (int i = numeric::bitWidth(n) - 1; i >= 0; i--) {
+            if (k + (1 << i) > n) {
+                continue;
+            }
+            if (f(acc + t[k + (1 << i)])) {
+                k += 1 << i;
+                acc += t[k];
+            }
+        }
+        return k;
+    }
 
     S operator[](std::size_t i) { return val[i]; }
 

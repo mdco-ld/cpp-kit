@@ -1,9 +1,9 @@
 #ifndef _MO_INTERNAL_ZETA_HPP_
 #define _MO_INTERNAL_ZETA_HPP_
 
-#include <mo/internal/enumerate-primes.hpp>
 #include <mo/internal/concepts/group.hpp>
 #include <mo/internal/concepts/monoid.hpp>
+#include <mo/internal/enumerate-primes.hpp>
 
 #include <vector>
 
@@ -121,6 +121,6 @@ template <traits::Group T> void multipleMobius(std::vector<T> &v) {
     }
 }
 
-}; // namespace mo
+}; // namespace mo::internal::zeta
 
 #endif

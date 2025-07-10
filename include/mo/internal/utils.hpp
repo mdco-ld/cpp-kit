@@ -65,16 +65,43 @@ template <class Int> struct LcmMonoid {
     }
 };
 
-template<class T> struct ProductMonoid {
+template <class T> struct ProductMonoid {
+    T value;
+    ProductMonoid()
+        requires numeric::Integral<T>
+        : value(T{1}) {}
+    ProductMonoid()
+        requires(!numeric::Integral<T>)
+        : value(T{}) {}
+    ProductMonoid(T val) : value(val) {}
+    ProductMonoid operator+(const ProductMonoid other) const {
+        return value * other.value;
+    }
+    ProductMonoid &operator+=(const ProductMonoid other) {
+        value *= other.value;
+        return *this;
+    }
+};
+
+template<class T> requires numeric::Integral<T> struct XorGroup {
 	T value;
-	ProductMonoid() requires numeric::Integral<T> : value(T{1}) {}
-	ProductMonoid() requires (!numeric::Integral<T>) : value(T{}) {}
-	ProductMonoid(T val) : value(val) {}
-	ProductMonoid operator+(const ProductMonoid other) const {
-		return value * other.value;
+	XorGroup() : value(T{0}) {}
+	XorGroup(T val) : value(val) {}
+	XorGroup operator+(const XorGroup other) const {
+		return value ^ other.value;
 	}
-	ProductMonoid &operator+=(const ProductMonoid other) {
-		value *= other.value;
+	XorGroup &operator+=(const XorGroup other) {
+		value ^= other.value;
+		return *this;
+	}
+	XorGroup operator-() const {
+		return *this;
+	}
+	XorGroup operator-(const XorGroup other) const {
+		return value ^ other.value;
+	}
+	XorGroup &operator-=(const XorGroup other) {
+		value ^= other.value;
 		return *this;
 	}
 };
@@ -84,6 +111,7 @@ static_assert(internal::traits::Monoid<MinMonoid<int>>);
 static_assert(internal::traits::Monoid<GcdMonoid<int>>);
 static_assert(internal::traits::Monoid<LcmMonoid<int>>);
 static_assert(internal::traits::Monoid<ProductMonoid<int>>);
+static_assert(internal::traits::Group<XorGroup<int>>);
 
 }; // namespace traits
 

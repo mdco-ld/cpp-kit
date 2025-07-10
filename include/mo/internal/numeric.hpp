@@ -1,8 +1,8 @@
 #ifndef _MO_INTERNAL_NUMERIC_HPP_
 #define _MO_INTERNAL_NUMERIC_HPP_
 
-#include <type_traits>
 #include <bit>
+#include <type_traits>
 
 namespace mo::internal::numeric {
 
@@ -59,25 +59,24 @@ constexpr inline int log2(Int x) {
  * returns floor(sqrt(x)).
  * assumes x >= 0.
  */
-template<Integral Int>
-constexpr inline Int isqrt(Int x) {
-	assert(x >= 0);
-	if (x <= 1) {
-		return x;
-	}
-	Int l = 1;
-	Int r = x;
-	while (r - l > 0) {
-		Int m = l + (r - l) / 2;
-		if (m <= x / m) {
-			l = m;
-		} else {
-			r = m;
-		}
-	}
-	return l;
+template <Integral Int> constexpr inline Int isqrt(Int x) {
+    assert(x >= 0);
+    if (x <= 1) {
+        return x;
+    }
+    Int l = 1;
+    Int r = x;
+    while (r - l > 0) {
+        Int m = l + (r - l) / 2;
+        if (m <= x / m) {
+            l = m;
+        } else {
+            r = m;
+        }
+    }
+    return l;
 }
 
-};
+}; // namespace mo::internal::numeric
 
 #endif

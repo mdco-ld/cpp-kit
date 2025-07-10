@@ -1,13 +1,15 @@
-#ifndef _MO_BIT_CONVOLUTION_HPP_
-#define _MO_BIT_CONVOLUTION_HPP_
+#ifndef _MO_INTERNAL_BIT_CONVOLUTION_HPP_
+#define _MO_INTERNAL_BIT_CONVOLUTION_HPP_
 
 #include <mo/internal/zeta.hpp>
+#include <mo/internal/concepts/group.hpp>
 #include <vector>
 #include <span>
+#include <cassert>
 
-namespace mo {
+namespace mo::internal {
 
-template <typename T>
+template <traits::Group T>
 std::vector<T> convolutionAnd(std::vector<T> a, std::vector<T> b) {
     assert(a.size() == b.size());
     supersetFastZeta(a);
@@ -20,7 +22,7 @@ std::vector<T> convolutionAnd(std::vector<T> a, std::vector<T> b) {
     return a;
 }
 
-template <typename T>
+template <traits::Group T>
 std::vector<T> convolutionOr(std::vector<T> a, std::vector<T> b) {
     assert(a.size() == b.size());
     subsetFastZeta(a);
@@ -33,7 +35,7 @@ std::vector<T> convolutionOr(std::vector<T> a, std::vector<T> b) {
     return a;
 }
 
-template <typename T>
+template <traits::Group T>
 std::vector<T> convolutionXorR(std::span<T> a, std::span<T> b) {
     assert(a.size() == b.size());
     size_t n = a.size();
@@ -63,7 +65,7 @@ std::vector<T> convolutionXorR(std::span<T> a, std::span<T> b) {
 	return result;
 }
 
-template <typename T>
+template <traits::Group T>
 std::vector<T> convolutionXor(std::vector<T> a, std::vector<T> b) {
 	assert(a.size() == b.size());
 	size_t n = a.size();
