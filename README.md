@@ -5,14 +5,15 @@ C++ kit for competitive programming
 # Implemented
 - Fenwick Tree
 - Segment Tree
+- Binary Trie
+- SCC
 
 # TODO
 - Li Chao
 - Lazy Segment Tree
 - FFT
 - Gaussian Elimination
-- Binary Trie
 - Topological Sort
-- SCC
 - 2-SAT
 - HLD
+- Persistent data structures
