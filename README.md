@@ -7,6 +7,7 @@ C++ kit for competitive programming
 - Segment Tree
 - Binary Trie
 - SCC
+- 2-SAT
 
 # TODO
 - Li Chao
@@ -14,6 +15,5 @@ C++ kit for competitive programming
 - FFT
 - Gaussian Elimination
 - Topological Sort
-- 2-SAT
 - HLD
 - Persistent data structures
