@@ -1,6 +1,7 @@
 #ifndef _MO_INTERNAL_SPLAY_TREE_HPP_
 #define _MO_INTERNAL_SPLAY_TREE_HPP_
 
+#include <algorithm>
 #include <mo/internal/concepts/monoid.hpp>
 #include <utility>
 #include <vector>
@@ -455,6 +456,122 @@ template <mo::internal::traits::Monoid S> class SplayTreeMonoid {
         auto R = find(r + 1);
         splay(L, R);
         return L->child[1];
+    }
+};
+
+template <class T> class OrderedSplayTree {
+  public:
+    OrderedSplayTree() : root(nullptr) {}
+
+    int size() { return getCount(root); }
+
+    void insert(T value) {
+        if (!root) {
+            root = new Node(value);
+        }
+        auto &node = find(root, value);
+        if (node == nullptr) {
+            node = new Node(value);
+        }
+        splay(node);
+    }
+
+    void remove(T value) {
+        auto &node = find(root, value);
+        if (node == nullptr) {
+            return;
+        }
+    }
+
+    template <typename... Ts> void emplace(Ts... args) {
+        insert(T(std::forward(args...)));
+    }
+
+  private:
+    struct Node {
+        T value;
+        Node *child[2];
+        Node *parent;
+        int count;
+        Node(T value) : value(value), parent(nullptr), count(1) {
+            child[0] = child[1] = nullptr;
+        }
+    };
+
+    Node *root;
+
+    Node *&find(Node *&node, T value) {
+        if (node == nullptr) {
+            return node;
+        }
+        if (node->value == value) {
+            return node;
+        }
+        if (value < node->value) {
+            return find(node->child[0]);
+        } else {
+            return find(node->child[1]);
+        }
+    }
+
+    Node *findIdx(Node *node, int idx) {
+        if (getCount(node->child[0]) > idx) {
+            return findIdx(node->child[0], idx);
+        }
+        idx -= getCount(node->child[0]);
+        if (idx == 0) {
+            return node;
+        }
+        return findIdx(node->child[1], idx);
+    }
+
+    static inline int getCount(Node *node) {
+        if (!node) {
+            return 0;
+        }
+        return node->count;
+    }
+
+    static inline void update(Node *node) {
+        if (!node) {
+            return;
+        }
+        node->count = 1 + getCount(node->child[0]) + getCount(node->child[1]);
+    }
+
+    static inline int dir(Node *node) {
+        return node->parent && node->parent->child[1] == node;
+    }
+
+    void rotate(Node *node) {
+        if (!node || !node->parent) {
+            return;
+        }
+        auto &par = node->parent;
+        int d = dir(node);
+        node->parent = par->parent;
+        par->parent->child[dir(par)] = node;
+        par->parent = node;
+        par->child[d] = node->child[!d];
+        node->child[!d] = par;
+        update(par);
+        update(node);
+    }
+
+    void splay(Node *node, Node *par = nullptr) {
+        while (node->parent != par) {
+            if (node->parent->parent == par) {
+                rotate(node);
+                return;
+            }
+            if (dir(node) == dir(node->parent)) {
+                rotate(node->parent);
+                rotate(node);
+            } else {
+                rotate(node);
+                rotate(node);
+            }
+        }
     }
 };
 
