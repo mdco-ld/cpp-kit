@@ -4,9 +4,6 @@ using namespace std;
 
 using ll = long long;
 
-template<typename T>
-using Fn = std::function<T>;
-
 #define int ll
 
 #if defined(MO_LOCAL)
