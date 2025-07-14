@@ -4,8 +4,6 @@
 #include <mo/internal/segment-tree.hpp>
 #include <mo/internal/utils.hpp>
 
-namespace mo {
-
 template<mo::internal::traits::Monoid S>
 using Segtree = mo::internal::SegmentTree<S>;
 
@@ -14,7 +12,5 @@ using MinSegtree = Segtree<mo::internal::utils::traits::MinMonoid<T>>;
 
 template<class T>
 using MaxSegtree = Segtree<mo::internal::utils::traits::MaxMonoid<T>>;
-
-};
 
 #endif

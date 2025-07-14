@@ -8,15 +8,44 @@
 
 #include <algorithm>
 #include <limits>
+#include <tuple>
+#include <utility>
 
 namespace mo::internal::utils {
 
+template <typename T> struct limits;
+
+template <class T>
+    requires numeric::Integral<T>
+struct limits<T> {
+    static constexpr T maxValue() { return std::numeric_limits<T>::max(); }
+    static constexpr T minValue() { return std::numeric_limits<T>::min(); }
+};
+
+template <class A, class B> struct limits<std::pair<A, B>> {
+    static constexpr std::pair<A, B> maxValue() {
+        return std::make_pair(limits<A>::maxValue(), limits<B>::maxValue());
+    }
+    static constexpr std::pair<A, B> minValue() {
+        return std::make_pair(limits<A>::minValue(), limits<B>::minValue());
+    }
+};
+
+template <class... Ts> struct limits<std::tuple<Ts...>> {
+    static constexpr std::tuple<Ts...> maxValue() {
+        return {(limits<Ts>::maxValue())...};
+    }
+    static constexpr std::tuple<Ts...> minValue() {
+        return {(limits<Ts>::minValue())...};
+    }
+};
+
 namespace traits {
 
-template <class Int> struct MaxMonoid {
-    Int value;
-    MaxMonoid() : value(std::numeric_limits<Int>::min()) {}
-    MaxMonoid(Int val) : value(val) {}
+template <class T> struct MaxMonoid {
+    T value;
+    MaxMonoid() : value(limits<T>::minValue()) {}
+    MaxMonoid(T val) : value(val) {}
     MaxMonoid operator+(const MaxMonoid other) const {
         return std::max(value, other.value);
     }
@@ -26,10 +55,10 @@ template <class Int> struct MaxMonoid {
     }
 };
 
-template <class Int> struct MinMonoid {
-    Int value;
-    MinMonoid() : value(std::numeric_limits<Int>::max()) {}
-    MinMonoid(Int val) : value(val) {}
+template <class T> struct MinMonoid {
+    T value;
+    MinMonoid() : value(limits<T>::maxValue()) {}
+    MinMonoid(T val) : value(val) {}
     MinMonoid operator+(const MinMonoid other) const {
         return std::min(value, other.value);
     }
@@ -83,27 +112,40 @@ template <class T> struct ProductMonoid {
     }
 };
 
-template<class T> requires numeric::Integral<T> struct XorGroup {
-	T value;
-	XorGroup() : value(T{0}) {}
-	XorGroup(T val) : value(val) {}
-	XorGroup operator+(const XorGroup other) const {
-		return value ^ other.value;
-	}
-	XorGroup &operator+=(const XorGroup other) {
-		value ^= other.value;
-		return *this;
-	}
-	XorGroup operator-() const {
-		return *this;
-	}
-	XorGroup operator-(const XorGroup other) const {
-		return value ^ other.value;
-	}
-	XorGroup &operator-=(const XorGroup other) {
-		value ^= other.value;
-		return *this;
-	}
+template <class T, T (*sum)(T, T), T (*zero)()> class MonoidOf {
+    T value;
+    MonoidOf(T val) : value(val) {}
+    MonoidOf() : value(zero()) {}
+    MonoidOf operator+(const MonoidOf other) const {
+        return sum(value, other.value);
+    }
+    MonoidOf &operator+=(const MonoidOf other) {
+        value = sum(value, other.value);
+        return *this;
+    }
+};
+
+template <class T>
+    requires numeric::Integral<T>
+struct XorGroup {
+    T value;
+    XorGroup() : value(T{0}) {}
+    XorGroup(T val) : value(val) {}
+    XorGroup operator+(const XorGroup other) const {
+        return value ^ other.value;
+    }
+    XorGroup &operator+=(const XorGroup other) {
+        value ^= other.value;
+        return *this;
+    }
+    XorGroup operator-() const { return *this; }
+    XorGroup operator-(const XorGroup other) const {
+        return value ^ other.value;
+    }
+    XorGroup &operator-=(const XorGroup other) {
+        value ^= other.value;
+        return *this;
+    }
 };
 
 static_assert(internal::traits::Monoid<MaxMonoid<int>>);
