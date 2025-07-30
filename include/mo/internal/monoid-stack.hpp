@@ -27,7 +27,7 @@ template <traits::Monoid S> class LeftMonoidStack {
 		return ret;
 	}
 
-	int size() { return values.size(); }
+	inline int size() { return std::ssize(values); }
 
   private:
 	std::vector<S> sums;
@@ -55,7 +55,7 @@ template <traits::Monoid S> class RightMonoidStack {
 		return ret;
 	}
 
-	int size() { return values.size(); }
+	inline int size() { return std::ssize(values); }
 
   private:
 	std::vector<S> sums;
