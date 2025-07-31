@@ -2,6 +2,10 @@
 
 using namespace std;
 
+#if defined(MO_LIB)
+using namespace mo;
+#endif
+
 using ll = long long;
 
 #define int ll

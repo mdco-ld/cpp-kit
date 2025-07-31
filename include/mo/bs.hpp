@@ -1,6 +1,10 @@
 #ifndef _MO_BINARY_SEARCH_HPP_
 #define _MO_BINARY_SEARCH_HPP_
 
+#ifndef MO_LIB
+#define MO_LIB
+#endif
+
 #include <mo/internal/binary-search.hpp>
 
 namespace mo {
