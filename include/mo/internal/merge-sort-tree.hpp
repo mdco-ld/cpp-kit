@@ -34,6 +34,9 @@ template <class T> class MergeSortTree {
 	int countGreaterEq(int l, int r, T x) {
 		return countPred(l, r, x, [](auto begin, auto end, T x) { return end - std::lower_bound(begin, end, x); });
 	}
+	int count(int l, int r, T x) {
+		return countPred(l, r, x, [](auto begin, auto end, T x) { return std::upper_bound(begin, end, x) - std::lower_bound(begin, end, x); });
+	}
 	void clear() {
 		t.clear();
 	}

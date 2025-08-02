@@ -123,6 +123,7 @@ template <class S> struct AffineMonoid {
 	AffineMonoid &operator+=(const AffineMonoid other) {
 		b += a * other.b;
 		a *= other.a;
+		return *this;
 	}
 };
 

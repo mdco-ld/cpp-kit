@@ -21,6 +21,7 @@ template <traits::Semigroup S> class SegmentTree {
         requires traits::Monoid<S>
     {
         t.assign(2 * n, S{});
+		this->n = n;
     }
 
     /**
@@ -55,12 +56,16 @@ template <traits::Semigroup S> class SegmentTree {
     /**
      * Changes the value at the position `i`.
      */
-    void update(int i, S value) {
+    void set(int i, S value) {
         t[i += n] = value;
         for (i >>= 1; i > 0; i >>= 1) {
             t[i] = t[i << 1] + t[i << 1 | 1];
         }
     }
+
+	S get(int i) {
+		return t[i + n];
+	}
 
   private:
     std::vector<S> t;
