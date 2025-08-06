@@ -26,6 +26,9 @@ using AffineMonoid = internal::utils::traits::AffineMonoid<T>;
 template <class T, T (*sum)(T, T), T (*zero)()>
 using MonoidOf = internal::utils::traits::MonoidOf<T, sum, zero>;
 
+template<internal::traits::Monoid S>
+using ReverseMonoid = internal::utils::traits::ReverseMonoid<S>;
+
 }; // namespace mo
 
 #endif

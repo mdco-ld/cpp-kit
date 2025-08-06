@@ -163,6 +163,20 @@ struct XorGroup {
 	}
 };
 
+template<internal::traits::Monoid S>
+struct ReverseMonoid {
+	S value;
+	ReverseMonoid() : value() {}
+	ReverseMonoid(S val) : value(val) {}
+	ReverseMonoid operator+(const ReverseMonoid other) const {
+		return other.value + value;
+	}
+	ReverseMonoid &operator+=(const ReverseMonoid other) {
+		value = other.value + value;
+		return *this;
+	}
+};
+
 static_assert(internal::traits::Monoid<MaxMonoid<int>>);
 static_assert(internal::traits::Monoid<MinMonoid<int>>);
 static_assert(internal::traits::Monoid<GcdMonoid<int>>);
@@ -170,6 +184,7 @@ static_assert(internal::traits::Monoid<LcmMonoid<int>>);
 static_assert(internal::traits::Monoid<ProductMonoid<int>>);
 static_assert(internal::traits::Group<XorGroup<int>>);
 static_assert(internal::traits::Monoid<AffineMonoid<int>>);
+static_assert(internal::traits::Monoid<ReverseMonoid<int>>);
 
 }; // namespace traits
 

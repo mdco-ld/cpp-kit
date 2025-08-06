@@ -7,7 +7,7 @@
 namespace mo::internal::math {
 
 template <traits::Semiring S>
-S geometricSum(S x, int n) {
+constexpr S geometricSum(S x, int n) {
 	using Mat = MatrixN<S, 2, 2>;
 	Mat mat;
 	mat[0][0] = x;
@@ -16,6 +16,20 @@ S geometricSum(S x, int n) {
 	mat[1][1] = S{1};
 	Mat mat2 = mat.pow(n + 1);
 	return mat2[1][0];
+}
+
+template<traits::Semiring S>
+constexpr S binaryPower(S x, unsigned long long n) {
+	S result = S{1};
+	S base = x;
+	while (n) {
+		if (n & 1) {
+			result *= base;
+		}
+		n >>= 1;
+		base *= base;
+	}
+	return result;
 }
 
 };
