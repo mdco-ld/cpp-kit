@@ -1,2 +1,8 @@
 test.cpp
+sol.cpp
 test
+input.txt
+output.txt
+perf.data
+perf.data.old
+gen.rb
