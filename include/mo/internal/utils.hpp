@@ -4,6 +4,7 @@
 #include <mo/internal/concepts/group.hpp>
 #include <mo/internal/concepts/monoid.hpp>
 #include <mo/internal/concepts/semigroup.hpp>
+#include <mo/internal/concepts/semiring.hpp>
 #include <mo/internal/numeric.hpp>
 
 #include <algorithm>
@@ -97,10 +98,10 @@ template <class Int> struct LcmMonoid {
 template <class T> struct ProductMonoid {
 	T value;
 	ProductMonoid()
-		requires numeric::Integral<T>
+		requires internal::traits::Semiring<T>
 		: value(T{1}) {}
 	ProductMonoid()
-		requires(!numeric::Integral<T>)
+		requires(!internal::traits::Semiring<T>)
 		: value(T{}) {}
 	ProductMonoid(T val) : value(val) {}
 	ProductMonoid operator+(const ProductMonoid other) const {
