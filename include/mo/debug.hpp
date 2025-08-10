@@ -3,37 +3,53 @@
 
 #include <iostream>
 #include <map>
-#include <mo/math/modint.hpp>
-#include <mo/math/polynomial.hpp>
+#include <mo/fenwick-tree.hpp>
+#include <mo/math/matrix.hpp>
+#include <mo/modint.hpp>
+#include <mo/monoids.hpp>
+#include <mo/segtree.hpp>
 #include <set>
 #include <vector>
 
 template <typename T> void __dbg2(T t) { std::cerr << t; }
+
+template <typename T>
+concept Debuggable = requires(T a) {
+	{ __dbg2(a) };
+} || requires(T a, std::ostream &out) {
+	{ out << a } -> std::same_as<std::ostream &>;
+};
+
 template <> inline void __dbg2(bool t) { std::cerr << (t ? "true" : "false"); }
-template <> inline void __dbg2(mo::math::ModInt1000000007 i) {
-	std::cerr << i.toInt() << "m1e9+7";
-}
-template <> inline void __dbg2(mo::math::ModInt998244353 i) {
-	std::cerr << i.toInt() << "m";
-}
-template <> inline void __dbg2(mo::math::ModInt2 i) {
-	std::cerr << i.toInt() << "m2";
-}
-template <typename T, typename U> void __dbg2(std::pair<T, U> p) {
+
+template <Debuggable T, Debuggable U> void __dbg2(std::pair<T, U> p) {
 	std::cerr << "(";
 	__dbg2(p.first);
 	std::cerr << ", ";
 	__dbg2(p.second);
 	std::cerr << ")";
 }
-template <typename T, typename U> void __dbg2(std::tuple<T, U> p) {
+
+template <Debuggable T1, Debuggable T2> void __dbg2(std::tuple<T1, T2> p) {
 	std::cerr << "(";
 	__dbg2(std::get<0>(p));
 	std::cerr << ", ";
 	__dbg2(std::get<1>(p));
 	std::cerr << ")";
 }
-template <typename T> void __dbg2(const std::set<T> &st) {
+
+template <Debuggable T1, Debuggable T2, Debuggable T3>
+void __dbg2(std::tuple<T1, T2, T3> p) {
+	std::cerr << "(";
+	__dbg2(std::get<0>(p));
+	std::cerr << ", ";
+	__dbg2(std::get<1>(p));
+	std::cerr << ", ";
+	__dbg2(std::get<2>(p));
+	std::cerr << ")";
+}
+
+template <Debuggable T> void __dbg2(const std::set<T> &st) {
 	std::cerr << "[";
 	int cnt = 0;
 	for (const auto &item : st) {
@@ -45,7 +61,7 @@ template <typename T> void __dbg2(const std::set<T> &st) {
 	}
 	std::cerr << "]";
 }
-template <typename T> void __dbg2(std::vector<T> &v) {
+template <Debuggable T> void __dbg2(std::vector<T> &v) {
 	std::cerr << "[";
 	for (int i = 0; i < v.size(); i++) {
 		__dbg2(v[i]);
@@ -55,31 +71,8 @@ template <typename T> void __dbg2(std::vector<T> &v) {
 	}
 	std::cerr << "]";
 }
-template <mo::math::Field F> void __dbg2(mo::math::Polynomial<F> &p) {
-	if (p.deg() == 0) {
-		__dbg2(p.coef(0));
-		return;
-	}
-	int n = p.deg();
-	bool first = true;
-	for (int i = 0; i <= n; i++) {
-		if (p.coef(i) == F::zero()) {
-			continue;
-		}
-		if (!first) {
-			std::cerr << " + ";
-		}
-		__dbg2(p.coef(i));
-		if (i > 0) {
-			std::cerr << " x";
-			if (i > 1) {
-				std::cerr << "^" << i;
-			}
-		}
-		first = false;
-	}
-}
-template <typename K, typename V> void __dbg2(std::map<K, V> &mp) {
+
+template <Debuggable K, Debuggable V> void __dbg2(std::map<K, V> &mp) {
 	std::cerr << "[";
 	int cnt = 0;
 	for (auto &[k, v] : mp) {
@@ -95,16 +88,74 @@ template <typename K, typename V> void __dbg2(std::map<K, V> &mp) {
 	}
 	std::cerr << "]";
 }
+
+template <> inline void __dbg2(mo::Int998244353 x) {
+	std::cerr << x.toInt() << 'm';
+}
+
+template <> inline void __dbg2(mo::Int1e9p7 x) {
+	std::cerr << x.toInt() << 'm';
+}
+
+template <Debuggable T> void __dbg2(mo::FenwickTree<T> &fw) {
+	std::cerr << "Fenwick{";
+	for (int i = 1; i <= fw.size(); i++) {
+		if (i > 1) {
+			std::cerr << ", ";
+		}
+		__dbg2(fw[i]);
+	}
+	std::cerr << "}";
+}
+
+template <Debuggable T> void __dbg2(mo::Segtree<T> &seg) {
+	std::cerr << "Segtree{";
+	for (int i = 0; i < seg.size(); i++) {
+		if (i > 0) {
+			std::cerr << ", ";
+		}
+		__dbg2(seg.get(i));
+	}
+	std::cerr << "}";
+}
+
+template <Debuggable T> void __dbg2(mo::MaxMonoid<T> x) { __dbg2(x.value); }
+
+template <Debuggable T> void __dbg2(mo::MinMonoid<T> x) { __dbg2(x.value); }
+
+template <Debuggable T> void __dbg2(mo::ReverseMonoid<T> x) { __dbg2(x.value); }
+
+template <Debuggable T> void __dbg2(mo::ProductMonoid<T> x) { __dbg2(x.value); }
+
+template <Debuggable T, int N, int M> void __dbg2(mo::MatrixN<T, N, M> mat) {
+	std::cerr << "Mat{";
+	for (int i = 0; i < N; i++) {
+		if (i > 0) {
+			std::cerr << ", ";
+		}
+		std::cerr << '[';
+		for (int j = 0; j < M; j++) {
+			if (j > 0) {
+				std::cerr << ", ";
+			}
+			__dbg2(mat[i][j]);
+		}
+		std::cerr << ']';
+	}
+}
+
 inline void __dbg() { std::cerr << std::endl; }
 template <typename T> void __dbg(T t) {
 	__dbg2(t);
 	std::cerr << std::endl;
 }
+
 template <typename T, typename... TRest> void __dbg(T first, TRest... rest) {
 	__dbg2(first);
 	std::cerr << ", ";
 	__dbg(rest...);
 }
+
 #define dbg(...)                                                               \
 	do {                                                                       \
 		std::cerr << "DBG> " << "(" << #__VA_ARGS__ << ") = ";                 \

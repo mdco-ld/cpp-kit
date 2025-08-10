@@ -2,6 +2,7 @@
 #define _MO_INTERNAL_GRAPH_TREE_HPP_
 
 #include <vector>
+
 namespace mo::internal {
 
 class Tree {

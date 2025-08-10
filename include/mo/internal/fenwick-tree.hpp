@@ -16,7 +16,7 @@ template <traits::Monoid S> class FenwickTree {
 	/**
 	 * Builds a fenwick tree filled with the neutral element of the group S.
 	 */
-	FenwickTree(int N) : t(N + 1, S{}), val(N + 1, S{}), n(N) {}
+	FenwickTree(int N) : t(N, S{}), val(N, S{}), n(N) {}
 
 	/**
 	 * changes the value at position `i` to `val`.
@@ -24,16 +24,16 @@ template <traits::Monoid S> class FenwickTree {
 	void set(int i, S value)
 		requires traits::Group<S>
 	{
-		add(i, value - val[i]);
+		add(i, value - val[i - 1]);
 	}
 
 	/**
 	 * Adds the value `value` at position i.
 	 */
 	void add(int i, S value) {
-		val[i] += value;
+		val[i - 1] += value;
 		for (; i <= n; i += i & -i) {
-			t[i] += value;
+			t[i - 1] += value;
 		}
 	}
 
@@ -43,7 +43,7 @@ template <traits::Monoid S> class FenwickTree {
 	S prefixSum(int r) {
 		S s{};
 		for (; r > 0; r -= r & -r) {
-			s += t[r];
+			s += t[r - 1];
 		}
 		return s;
 	}
@@ -97,7 +97,11 @@ template <traits::Monoid S> class FenwickTree {
 		return k;
 	}
 
-	S operator[](std::size_t i) { return val[i]; }
+	S operator[](std::size_t i) { return val[i - 1]; }
+
+	inline int size() {
+		return n;
+	}
 
   private:
 	std::vector<S> t;

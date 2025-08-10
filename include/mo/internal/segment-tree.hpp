@@ -67,6 +67,10 @@ template <traits::Semigroup S> class SegmentTree {
 		return t[i + n];
 	}
 
+	inline int size() {
+		return n;
+	}
+
   private:
     std::vector<S> t;
     int n;
