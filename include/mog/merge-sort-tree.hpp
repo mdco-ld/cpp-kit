@@ -1,16 +1,15 @@
-#ifndef _MO_MERGE_SORT_TREE_HPP_
-#define _MO_MERGE_SORT_TREE_HPP_
+#ifndef _MOG_MERGE_SORT_TREE_HPP_
+#define _MOG_MERGE_SORT_TREE_HPP_
 
-#ifndef MO_LIB
-#define MO_LIB
+#ifndef MOG_LIB
+#define MOG_LIB
 #endif
 
-#include <mo/internal/merge-sort-tree.hpp>
+#include <mog/internal/merge-sort-tree.hpp>
 
-namespace mo {
+namespace mog {
 
-template<class T>
-using MergeSortTree = internal::MergeSortTree<T>;
+template <class T> using MergeSortTree = internal::MergeSortTree<T>;
 
 };
 

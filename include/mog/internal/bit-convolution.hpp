@@ -1,46 +1,46 @@
-#ifndef _MO_INTERNAL_BIT_CONVOLUTION_HPP_
-#define _MO_INTERNAL_BIT_CONVOLUTION_HPP_
+#ifndef _MOG_INTERNAL_BIT_CONVOLUTION_HPP_
+#define _MOG_INTERNAL_BIT_CONVOLUTION_HPP_
 
-#include <mo/internal/zeta.hpp>
-#include <mo/internal/concepts/group.hpp>
-#include <vector>
-#include <span>
 #include <cassert>
+#include <mog/internal/concepts/group.hpp>
+#include <mog/internal/zeta.hpp>
+#include <span>
+#include <vector>
 
-namespace mo::internal {
+namespace mog::internal {
 
 template <traits::Group T>
 std::vector<T> convolutionAnd(std::vector<T> a, std::vector<T> b) {
-    assert(a.size() == b.size());
-    supersetFastZeta(a);
-    supersetFastZeta(b);
-    size_t n = a.size();
-    for (size_t i = 0; i < n; i++) {
-        a[i] *= b[i];
-    }
-    supersetFastMobius(a);
-    return a;
+	assert(a.size() == b.size());
+	supersetFastZeta(a);
+	supersetFastZeta(b);
+	size_t n = a.size();
+	for (size_t i = 0; i < n; i++) {
+		a[i] *= b[i];
+	}
+	supersetFastMobius(a);
+	return a;
 }
 
 template <traits::Group T>
 std::vector<T> convolutionOr(std::vector<T> a, std::vector<T> b) {
-    assert(a.size() == b.size());
-    subsetFastZeta(a);
-    subsetFastZeta(b);
-    size_t n = a.size();
-    for (size_t i = 0; i < n; i++) {
-        a[i] *= b[i];
-    }
-    subsetFastMobius(a);
-    return a;
+	assert(a.size() == b.size());
+	subsetFastZeta(a);
+	subsetFastZeta(b);
+	size_t n = a.size();
+	for (size_t i = 0; i < n; i++) {
+		a[i] *= b[i];
+	}
+	subsetFastMobius(a);
+	return a;
 }
 
 template <traits::Group T>
 std::vector<T> convolutionXorR(std::span<T> a, std::span<T> b) {
-    assert(a.size() == b.size());
-    size_t n = a.size();
-    assert((n & (n - 1)) == 0); // power of 2
-    std::vector<T> result(n);
+	assert(a.size() == b.size());
+	size_t n = a.size();
+	assert((n & (n - 1)) == 0); // power of 2
+	std::vector<T> result(n);
 	if (n == 2) {
 		result[0] = a[0] * b[0] + a[1] * b[1];
 		result[1] = a[0] * b[1] + a[1] * b[0];
@@ -110,6 +110,6 @@ std::vector<T> convolutionXor(std::vector<T> a, std::vector<T> b) {
 	return result;
 }
 
-}; // namespace mo
+}; // namespace mog::internal
 
 #endif

@@ -1,15 +1,15 @@
-#ifndef _MO_MONOID_DEQUE_
-#define _MO_MONOID_DEQUE_
+#ifndef _MOG_MONOID_DEQUE_
+#define _MOG_MONOID_DEQUE_
 
-#ifndef MO_LIB
-#define MO_LIB
+#ifndef MOG_LIB
+#define MOG_LIB
 #endif
 
-#include <mo/internal/monoid-deque.hpp>
+#include <mog/internal/monoid-deque.hpp>
 
-namespace mo {
+namespace mog {
 
-template<internal::traits::Monoid S>
+template <internal::traits::Monoid S>
 using MonoidDeque = internal::MonoidDeque<S>;
 
 };

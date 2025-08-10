@@ -1,20 +1,20 @@
-#ifndef _MO_MONOID_STACK_
-#define _MO_MONOID_STACK_
+#ifndef _MOG_MONOID_STACK_
+#define _MOG_MONOID_STACK_
 
-#ifndef MO_LIB
-#define MO_LIB
+#ifndef MOG_LIB
+#define MOG_LIB
 #endif
 
-#include <mo/internal/monoid-stack.hpp>
+#include <mog/internal/monoid-stack.hpp>
 
-namespace mo {
+namespace mog {
 
-template<internal::traits::Monoid S>
+template <internal::traits::Monoid S>
 using LeftMonoidStack = internal::RightMonoidStack<S>;
 
-template<internal::traits::Monoid S>
+template <internal::traits::Monoid S>
 using RightMonoidStack = internal::RightMonoidStack<S>;
 
-};
+}; // namespace mog
 
 #endif

@@ -1,18 +1,18 @@
-#ifndef _MO_INTERNAL_UTILS_HPP_
-#define _MO_INTERNAL_UTILS_HPP_
+#ifndef _MOG_INTERNAL_UTILS_HPP_
+#define _MOG_INTERNAL_UTILS_HPP_
 
-#include <mo/internal/concepts/group.hpp>
-#include <mo/internal/concepts/monoid.hpp>
-#include <mo/internal/concepts/semigroup.hpp>
-#include <mo/internal/concepts/semiring.hpp>
-#include <mo/internal/numeric.hpp>
+#include <mog/internal/concepts/group.hpp>
+#include <mog/internal/concepts/monoid.hpp>
+#include <mog/internal/concepts/semigroup.hpp>
+#include <mog/internal/concepts/semiring.hpp>
+#include <mog/internal/numeric.hpp>
 
 #include <algorithm>
 #include <limits>
 #include <tuple>
 #include <utility>
 
-namespace mo::internal::utils {
+namespace mog::internal::utils {
 
 template <typename T> struct limits;
 
@@ -51,7 +51,7 @@ template <class T> struct MaxMonoid {
 		return std::max(value, other.value);
 	}
 	MaxMonoid &operator+=(const MaxMonoid other) {
-		value = std::max(value, other, value);
+		value = std::max(value, other.value);
 		return *this;
 	}
 };
@@ -164,8 +164,7 @@ struct XorGroup {
 	}
 };
 
-template<internal::traits::Monoid S>
-struct ReverseMonoid {
+template <internal::traits::Monoid S> struct ReverseMonoid {
 	S value;
 	ReverseMonoid() : value() {}
 	ReverseMonoid(S val) : value(val) {}
@@ -189,6 +188,6 @@ static_assert(internal::traits::Monoid<ReverseMonoid<int>>);
 
 }; // namespace traits
 
-}; // namespace mo::internal::utils
+}; // namespace mog::internal::utils
 
 #endif

@@ -1,8 +1,9 @@
-#ifndef _MO_INTERNAL_CONCEPTS_SEMIRING_HPP_
-#define _MO_INTERNAL_CONCEPTS_SEMIRING_HPP_
+#ifndef _MOG_INTERNAL_CONCEPTS_SEMIRING_HPP_
+#define _MOG_INTERNAL_CONCEPTS_SEMIRING_HPP_
 
 #include <concepts>
-namespace mo::internal::traits {
+
+namespace mog::internal::traits {
 
 template <class S>
 concept Semiring = requires(S a, S b) {
@@ -14,6 +15,6 @@ concept Semiring = requires(S a, S b) {
 	{ S{1} } -> std::same_as<S>;
 };
 
-}; // namespace mo::internal::traits
+}; // namespace mog::internal::traits
 
 #endif

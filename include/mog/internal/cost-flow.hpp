@@ -1,28 +1,28 @@
-#ifndef _MO_INTERNAL_COST_FLOW_HPP_
-#define _MO_INTERNAL_COST_FLOW_HPP_
+#ifndef _MOG_INTERNAL_COST_FLOW_HPP_
+#define _MOG_INTERNAL_COST_FLOW_HPP_
 
 #include <algorithm>
 #include <limits>
 #include <utility>
 #include <vector>
 
-namespace mo::internal {
+namespace mog::internal {
 
 template <class Cap, class Cost> class CostFlowGraph {
   public:
-    struct Edge {
-        int from;
-        int to;
-        Cap cap;
-        Cost cost;
-    };
+	struct Edge {
+		int from;
+		int to;
+		Cap cap;
+		Cost cost;
+	};
 
-    CostFlowGraph(int N) : n(N) {}
+	CostFlowGraph(int N) : n(N) {}
 
-    void addEdge(int from, int to, Cap cap, Cost cost) {
-        edges.emplace_back(from, to, cap, cost);
-        edges.emplace_back(to, from, 0, -cost);
-    }
+	void addEdge(int from, int to, Cap cap, Cost cost) {
+		edges.emplace_back(from, to, cap, cost);
+		edges.emplace_back(to, from, 0, -cost);
+	}
 
 	std::pair<Cap, Cost> minCostFlow(int s, int t) {
 		return minCostFlow(s, t, std::numeric_limits<Cap>::max());
@@ -34,12 +34,13 @@ template <class Cap, class Cost> class CostFlowGraph {
 		std::vector<Cost> dist(n);
 		std::vector<int> par(n);
 		while (f < flowCap) {
-			std::fill(dist.begin(), dist.end(), std::numeric_limits<Cost>::max());
+			std::fill(dist.begin(), dist.end(),
+					  std::numeric_limits<Cost>::max());
 			std::fill(par.begin(), par.end(), -1);
 			dist[s] = 0;
 			for (int iter = 1; iter < n; iter++) {
 				int i = 0;
-				for (auto [a, b, cap, cost]: edges) {
+				for (auto [a, b, cap, cost] : edges) {
 					if (cap == 0) {
 						i++;
 						continue;
@@ -71,10 +72,10 @@ template <class Cap, class Cost> class CostFlowGraph {
 	}
 
   private:
-    std::vector<Edge> edges;
-    int n;
+	std::vector<Edge> edges;
+	int n;
 };
 
-}; // namespace mo::internal
+}; // namespace mog::internal
 
 #endif

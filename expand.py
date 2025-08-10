@@ -18,7 +18,7 @@ def get_local_include_file(line: str):
     if filename in IGNORED_FILES:
         return '\n'
     print(f'Expanding {filename}')
-    filepath = os.path.join(os.getenv('MOG_CPP_PATH'), 'mo', filename)
+    filepath = os.path.join(os.getenv('MOG_CPP_PATH'), 'mog', filename)
     contents = open(filepath).readlines()
     return contents
 

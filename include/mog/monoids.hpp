@@ -1,13 +1,13 @@
-#ifndef _MO_MONOIDS_HPP_
-#define _MO_MONOIDS_HPP_
+#ifndef _MOG_MONOIDS_HPP_
+#define _MOG_MONOIDS_HPP_
 
-#ifndef MO_LIB
-#define MO_LIB
+#ifndef MOG_LIB
+#define MOG_LIB
 #endif
 
-#include <mo/internal/utils.hpp>
+#include <mog/internal/utils.hpp>
 
-namespace mo {
+namespace mog {
 
 template <class T> using MaxMonoid = internal::utils::traits::MaxMonoid<T>;
 
@@ -26,9 +26,9 @@ using AffineMonoid = internal::utils::traits::AffineMonoid<T>;
 template <class T, T (*sum)(T, T), T (*zero)()>
 using MonoidOf = internal::utils::traits::MonoidOf<T, sum, zero>;
 
-template<internal::traits::Monoid S>
+template <internal::traits::Monoid S>
 using ReverseMonoid = internal::utils::traits::ReverseMonoid<S>;
 
-}; // namespace mo
+}; // namespace mog
 
 #endif

@@ -1,13 +1,13 @@
-#ifndef _MO_DEBUG_HPP_
-#define _MO_DEBUG_HPP_
+#ifndef _MOG_DEBUG_HPP_
+#define _MOG_DEBUG_HPP_
 
 #include <iostream>
 #include <map>
-#include <mo/fenwick-tree.hpp>
-#include <mo/math/matrix.hpp>
-#include <mo/modint.hpp>
-#include <mo/monoids.hpp>
-#include <mo/segtree.hpp>
+#include <mog/fenwick-tree.hpp>
+#include <mog/math/matrix.hpp>
+#include <mog/modint.hpp>
+#include <mog/monoids.hpp>
+#include <mog/segtree.hpp>
 #include <set>
 #include <vector>
 
@@ -46,6 +46,19 @@ void __dbg2(std::tuple<T1, T2, T3> p) {
 	__dbg2(std::get<1>(p));
 	std::cerr << ", ";
 	__dbg2(std::get<2>(p));
+	std::cerr << ")";
+}
+
+template <Debuggable T1, Debuggable T2, Debuggable T3, Debuggable T4>
+void __dbg2(std::tuple<T1, T2, T3, T4> p) {
+	std::cerr << "(";
+	__dbg2(std::get<0>(p));
+	std::cerr << ", ";
+	__dbg2(std::get<1>(p));
+	std::cerr << ", ";
+	__dbg2(std::get<2>(p));
+	std::cerr << ", ";
+	__dbg2(std::get<3>(p));
 	std::cerr << ")";
 }
 
@@ -89,15 +102,15 @@ template <Debuggable K, Debuggable V> void __dbg2(std::map<K, V> &mp) {
 	std::cerr << "]";
 }
 
-template <> inline void __dbg2(mo::Int998244353 x) {
+template <> inline void __dbg2(mog::Int998244353 x) {
 	std::cerr << x.toInt() << 'm';
 }
 
-template <> inline void __dbg2(mo::Int1e9p7 x) {
+template <> inline void __dbg2(mog::Int1e9p7 x) {
 	std::cerr << x.toInt() << 'm';
 }
 
-template <Debuggable T> void __dbg2(mo::FenwickTree<T> &fw) {
+template <Debuggable T> void __dbg2(mog::FenwickTree<T> &fw) {
 	std::cerr << "Fenwick{";
 	for (int i = 1; i <= fw.size(); i++) {
 		if (i > 1) {
@@ -108,7 +121,7 @@ template <Debuggable T> void __dbg2(mo::FenwickTree<T> &fw) {
 	std::cerr << "}";
 }
 
-template <Debuggable T> void __dbg2(mo::Segtree<T> &seg) {
+template <Debuggable T> void __dbg2(mog::Segtree<T> &seg) {
 	std::cerr << "Segtree{";
 	for (int i = 0; i < seg.size(); i++) {
 		if (i > 0) {
@@ -119,15 +132,19 @@ template <Debuggable T> void __dbg2(mo::Segtree<T> &seg) {
 	std::cerr << "}";
 }
 
-template <Debuggable T> void __dbg2(mo::MaxMonoid<T> x) { __dbg2(x.value); }
+template <Debuggable T> void __dbg2(mog::MaxMonoid<T> x) { __dbg2(x.value); }
 
-template <Debuggable T> void __dbg2(mo::MinMonoid<T> x) { __dbg2(x.value); }
+template <Debuggable T> void __dbg2(mog::MinMonoid<T> x) { __dbg2(x.value); }
 
-template <Debuggable T> void __dbg2(mo::ReverseMonoid<T> x) { __dbg2(x.value); }
+template <Debuggable T> void __dbg2(mog::ReverseMonoid<T> x) {
+	__dbg2(x.value);
+}
 
-template <Debuggable T> void __dbg2(mo::ProductMonoid<T> x) { __dbg2(x.value); }
+template <Debuggable T> void __dbg2(mog::ProductMonoid<T> x) {
+	__dbg2(x.value);
+}
 
-template <Debuggable T, int N, int M> void __dbg2(mo::MatrixN<T, N, M> mat) {
+template <Debuggable T, int N, int M> void __dbg2(mog::MatrixN<T, N, M> mat) {
 	std::cerr << "Mat{";
 	for (int i = 0; i < N; i++) {
 		if (i > 0) {

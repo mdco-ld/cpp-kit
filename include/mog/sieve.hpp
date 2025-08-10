@@ -1,19 +1,19 @@
-#ifndef _MO_SIEVE_HPP_
-#define _MO_SIEVE_HPP_
+#ifndef _MOG_SIEVE_HPP_
+#define _MOG_SIEVE_HPP_
 
-#ifndef MO_LIB
-#define MO_LIB
+#ifndef MOG_LIB
+#define MOG_LIB
 #endif
 
-#include <mo/internal/linear-sieve.hpp>
-#include <mo/internal/enumerate-primes.hpp>
+#include <mog/internal/enumerate-primes.hpp>
+#include <mog/internal/linear-sieve.hpp>
 
-namespace mo {
+namespace mog {
 
 using Sieve = internal::sieve::LinearSieve;
 
 static const auto getPrimes = internal::sieve::enumeratePrimes;
 
-};
+}; // namespace mog
 
 #endif

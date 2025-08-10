@@ -1,11 +1,11 @@
-#ifndef _MO_INTERNAL_MODINT_HPP_
-#define _MO_INTERNAL_MODINT_HPP_
+#ifndef _MOG_INTERNAL_MODINT_HPP_
+#define _MOG_INTERNAL_MODINT_HPP_
 
 #include <concepts>
 #include <cstdint>
 #include <tuple>
 
-namespace mo::internal {
+namespace mog::internal {
 
 template <std::integral T> constexpr T extendedEuclid(T a, T b, T &x, T &y) {
 	x = 1;
@@ -140,6 +140,6 @@ template <> class ModInt<2> {
 	int8_t value;
 };
 
-}; // namespace mo::internal
+}; // namespace mog::internal
 
 #endif

@@ -1,13 +1,12 @@
-#ifndef _MO_INTERNAL_MATH_COMPUTATIONS_HPP_
-#define _MO_INTERNAL_MATH_COMPUTATIONS_HPP_
+#ifndef _MOG_INTERNAL_MATH_COMPUTATIONS_HPP_
+#define _MOG_INTERNAL_MATH_COMPUTATIONS_HPP_
 
-#include <mo/internal/math/matrix.hpp>
-#include <mo/internal/concepts/semiring.hpp>
+#include <mog/internal/concepts/semiring.hpp>
+#include <mog/internal/math/matrix.hpp>
 
-namespace mo::internal::math {
+namespace mog::internal::math {
 
-template <traits::Semiring S>
-constexpr S geometricSum(S x, int n) {
+template <traits::Semiring S> constexpr S geometricSum(S x, int n) {
 	using Mat = MatrixN<S, 2, 2>;
 	Mat mat;
 	mat[0][0] = x;
@@ -18,7 +17,7 @@ constexpr S geometricSum(S x, int n) {
 	return mat2[1][0];
 }
 
-template<traits::Semiring S>
+template <traits::Semiring S>
 constexpr S binaryPower(S x, unsigned long long n) {
 	S result = S{1};
 	S base = x;
@@ -32,6 +31,6 @@ constexpr S binaryPower(S x, unsigned long long n) {
 	return result;
 }
 
-};
+}; // namespace mog::internal::math
 
 #endif

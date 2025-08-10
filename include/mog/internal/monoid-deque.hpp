@@ -1,20 +1,16 @@
-#ifndef _MO_INTERNAL_MONOID_DEQUE_HPP_
-#define _MO_INTERNAL_MONOID_DEQUE_HPP_
+#ifndef _MOG_INTERNAL_MONOID_DEQUE_HPP_
+#define _MOG_INTERNAL_MONOID_DEQUE_HPP_
 
-#include <mo/internal/concepts/monoid.hpp>
-#include <mo/internal/monoid-stack.hpp>
+#include <mog/internal/concepts/monoid.hpp>
+#include <mog/internal/monoid-stack.hpp>
 #include <vector>
 
-namespace mo::internal {
+namespace mog::internal {
 
 template <traits::Monoid S> class MonoidDeque {
   public:
-	void pushRight(S x) {
-		right.push(x);
-	}
-	void pushLeft(S x) {
-		left.push(x);
-	}
+	void pushRight(S x) { right.push(x); }
+	void pushLeft(S x) { left.push(x); }
 	S popRight() {
 		if (!right.size()) {
 			balance();
@@ -27,12 +23,9 @@ template <traits::Monoid S> class MonoidDeque {
 		}
 		return left.pop();
 	}
-	S sum() {
-		return left.sum() + right.sum();
-	}
-	inline int size() {
-		return left.size() + right.size();
-	}
+	S sum() { return left.sum() + right.sum(); }
+	inline int size() { return left.size() + right.size(); }
+
   private:
 	void balance() {
 		if (!left.size()) {
@@ -66,6 +59,6 @@ template <traits::Monoid S> class MonoidDeque {
 	RightMonoidStack<S> right;
 };
 
-}; // namespace mo::internal
+}; // namespace mog::internal
 
 #endif

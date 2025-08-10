@@ -1,16 +1,16 @@
-#ifndef _MO_FENWICK_TREE_HPP_
-#define _MO_FENWICK_TREE_HPP_
+#ifndef _MOG_FENWICK_TREE_HPP_
+#define _MOG_FENWICK_TREE_HPP_
 
-#ifndef MO_LIB
-#define MO_LIB
+#ifndef MOG_LIB
+#define MOG_LIB
 #endif
 
-#include <mo/internal/fenwick-tree.hpp>
+#include <mog/internal/fenwick-tree.hpp>
 
-namespace mo {
+namespace mog {
 
-template<mo::internal::traits::Monoid S>
-using FenwickTree = mo::internal::FenwickTree<S>;
+template <mog::internal::traits::Monoid S>
+using FenwickTree = mog::internal::FenwickTree<S>;
 
 };
 

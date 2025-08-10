@@ -1,13 +1,13 @@
-#ifndef _MO_TWO_SAT_HPP_
-#define _MO_TWO_SAT_HPP_
+#ifndef _MOG_TWO_SAT_HPP_
+#define _MOG_TWO_SAT_HPP_
 
-#ifndef MO_LIB
-#define MO_LIB
+#ifndef MOG_LIB
+#define MOG_LIB
 #endif
 
-#include <mo/internal/two-sat.hpp>
+#include <mog/internal/two-sat.hpp>
 
-namespace mo {
+namespace mog {
 
 using TwoSat = internal::TwoSat;
 

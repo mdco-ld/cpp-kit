@@ -1,15 +1,15 @@
-#ifndef _MO_MONOID_QUEUE_
-#define _MO_MONOID_QUEUE_
+#ifndef _MOG_MONOID_QUEUE_
+#define _MOG_MONOID_QUEUE_
 
-#ifndef MO_LIB
-#define MO_LIB
+#ifndef MOG_LIB
+#define MOG_LIB
 #endif
 
-#include <mo/internal/monoid-queue.hpp>
+#include <mog/internal/monoid-queue.hpp>
 
-namespace mo {
+namespace mog {
 
-template<internal::traits::Monoid S>
+template <internal::traits::Monoid S>
 using MonoidQueue = internal::RightMonoidStack<S>;
 
 };

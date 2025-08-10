@@ -1,10 +1,10 @@
-#ifndef _MO_INTERNAL_MATH_MATRIX_HPP_
-#define _MO_INTERNAL_MATH_MATRIX_HPP_
+#ifndef _MOG_INTERNAL_MATH_MATRIX_HPP_
+#define _MOG_INTERNAL_MATH_MATRIX_HPP_
 
 #include <array>
-#include <mo/internal/concepts/ring.hpp>
+#include <mog/internal/concepts/ring.hpp>
 
-namespace mo::internal::math {
+namespace mog::internal::math {
 
 template <traits::Semiring S, int N, int M = N> class MatrixN {
   private:
@@ -36,7 +36,7 @@ template <traits::Semiring S, int N, int M = N> class MatrixN {
 		return result;
 	}
 	constexpr MatrixN() = default;
-	
+
 	constexpr MatrixN(int x) {
 		if (x) {
 			*this = identity();
@@ -56,7 +56,6 @@ template <traits::Semiring S, int N, int M = N> class MatrixN {
 		}
 		return result;
 	}
-
 
 	constexpr MatrixN operator-(const MatrixN other) const {
 		MatrixN result;
@@ -120,6 +119,6 @@ template <traits::Semiring S, int N, int M = N> class MatrixN {
 	}
 };
 
-}; // namespace mo::internal::math
+}; // namespace mog::internal::math
 
 #endif

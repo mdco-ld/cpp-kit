@@ -1,12 +1,12 @@
-#ifndef _MO_INTERNAL_FENWICK_TREE_HPP_
-#define _MO_INTERNAL_FENWICK_TREE_HPP_
+#ifndef _MOG_INTERNAL_FENWICK_TREE_HPP_
+#define _MOG_INTERNAL_FENWICK_TREE_HPP_
 
-#include <mo/internal/concepts/group.hpp>
-#include <mo/internal/concepts/monoid.hpp>
-#include <mo/internal/numeric.hpp>
+#include <mog/internal/concepts/group.hpp>
+#include <mog/internal/concepts/monoid.hpp>
+#include <mog/internal/numeric.hpp>
 #include <vector>
 
-namespace mo::internal {
+namespace mog::internal {
 
 /**
  * Fenwick tree on group S.
@@ -99,9 +99,7 @@ template <traits::Monoid S> class FenwickTree {
 
 	S operator[](std::size_t i) { return val[i - 1]; }
 
-	inline int size() {
-		return n;
-	}
+	inline int size() { return n; }
 
   private:
 	std::vector<S> t;
@@ -109,6 +107,6 @@ template <traits::Monoid S> class FenwickTree {
 	int n;
 };
 
-}; // namespace mo::internal
+}; // namespace mog::internal
 
 #endif

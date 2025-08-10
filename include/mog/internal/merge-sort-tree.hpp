@@ -1,15 +1,14 @@
-#ifndef _MO_INTERNAL_MERGE_SORT_TREE_HPP_
-#define _MO_INTERNAL_MERGE_SORT_TREE_HPP_
+#ifndef _MOG_INTERNAL_MERGE_SORT_TREE_HPP_
+#define _MOG_INTERNAL_MERGE_SORT_TREE_HPP_
 
-#include <vector>
 #include <algorithm>
+#include <vector>
 
-namespace mo::internal {
+namespace mog::internal {
 
 template <class T> class MergeSortTree {
   public:
-	MergeSortTree() {
-	}
+	MergeSortTree() {}
 	void build(std::vector<T> &v) {
 		clear();
 		n = std::ssize(v);
@@ -19,27 +18,39 @@ template <class T> class MergeSortTree {
 		}
 		for (int i = n - 1; i > 0; i--) {
 			t[i].resize(ssize(t[i << 1]) + ssize(t[i << 1 | 1]));
-			std::merge(t[i << 1].begin(), t[i << 1].end(), t[i << 1 | 1].begin(), t[i << 1 | 1].end(), t[i].begin());
+			std::merge(t[i << 1].begin(), t[i << 1].end(),
+					   t[i << 1 | 1].begin(), t[i << 1 | 1].end(),
+					   t[i].begin());
 		}
 	}
 	int countLess(int l, int r, T x) {
-		return countPred(l, r, x, [](auto begin, auto end, T x) { return std::lower_bound(begin, end, x) - begin; });
+		return countPred(l, r, x, [](auto begin, auto end, T x) {
+			return std::lower_bound(begin, end, x) - begin;
+		});
 	}
 	int countLessEq(int l, int r, T x) {
-		return countPred(l, r, x, [](auto begin, auto end, T x) { return std::upper_bound(begin, end, x) - begin; });
+		return countPred(l, r, x, [](auto begin, auto end, T x) {
+			return std::upper_bound(begin, end, x) - begin;
+		});
 	}
 	int countGreater(int l, int r, T x) {
-		return countPred(l, r, x, [](auto begin, auto end, T x) { return end - std::upper_bound(begin, end, x); });
+		return countPred(l, r, x, [](auto begin, auto end, T x) {
+			return end - std::upper_bound(begin, end, x);
+		});
 	}
 	int countGreaterEq(int l, int r, T x) {
-		return countPred(l, r, x, [](auto begin, auto end, T x) { return end - std::lower_bound(begin, end, x); });
+		return countPred(l, r, x, [](auto begin, auto end, T x) {
+			return end - std::lower_bound(begin, end, x);
+		});
 	}
 	int count(int l, int r, T x) {
-		return countPred(l, r, x, [](auto begin, auto end, T x) { return std::upper_bound(begin, end, x) - std::lower_bound(begin, end, x); });
+		return countPred(l, r, x, [](auto begin, auto end, T x) {
+			return std::upper_bound(begin, end, x) -
+				   std::lower_bound(begin, end, x);
+		});
 	}
-	void clear() {
-		t.clear();
-	}
+	void clear() { t.clear(); }
+
   private:
 	int n;
 	std::vector<std::vector<T>> t;
@@ -59,6 +70,6 @@ template <class T> class MergeSortTree {
 	}
 };
 
-}; // namespace mo::internal
+}; // namespace mog::internal
 
 #endif

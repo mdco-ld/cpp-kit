@@ -1,10 +1,10 @@
-#ifndef _MO_INTERNAL_PERSISTENT_SEGMENT_TREE_HPP_
-#define _MO_INTERNAL_PERSISTENT_SEGMENT_TREE_HPP_
+#ifndef _MOG_INTERNAL_PERSISTENT_SEGMENT_TREE_HPP_
+#define _MOG_INTERNAL_PERSISTENT_SEGMENT_TREE_HPP_
 
-#include <mo/internal/concepts/monoid.hpp>
+#include <mog/internal/concepts/monoid.hpp>
 #include <vector>
 
-namespace mo::internal {
+namespace mog::internal {
 
 template <traits::Monoid S> class PersistentSegmentTree {
 	using i64 = long long;
@@ -157,6 +157,6 @@ template <traits::Monoid S> class PersistentSegmentTree {
 	}
 };
 
-}; // namespace mo::internal
+}; // namespace mog::internal
 
 #endif

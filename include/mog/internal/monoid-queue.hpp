@@ -1,16 +1,14 @@
-#ifndef _MO_INTERNAL_MONOID_QUEUE_HPP_
-#define _MO_INTERNAL_MONOID_QUEUE_HPP_
+#ifndef _MOG_INTERNAL_MONOID_QUEUE_HPP_
+#define _MOG_INTERNAL_MONOID_QUEUE_HPP_
 
-#include <mo/internal/concepts/monoid.hpp>
-#include <mo/internal/monoid-stack.hpp>
+#include <mog/internal/concepts/monoid.hpp>
+#include <mog/internal/monoid-stack.hpp>
 
-namespace mo::internal {
+namespace mog::internal {
 
 template <traits::Monoid S> class MonoidQueue {
   public:
-	void push(S x) {
-		right.push(x);
-	}
+	void push(S x) { right.push(x); }
 	S pop() {
 		if (!left.size()) {
 			while (right.size()) {
@@ -19,17 +17,14 @@ template <traits::Monoid S> class MonoidQueue {
 		}
 		return left.pop();
 	}
-	S sum() {
-		return left.sum() + right.sum();
-	}
-	int size() {
-		return left.size() + right.size();
-	}
+	S sum() { return left.sum() + right.sum(); }
+	int size() { return left.size() + right.size(); }
+
   private:
 	LeftMonoidStack<S> left;
 	RightMonoidStack<S> right;
 };
 
-}; // namespace mo::internal
+}; // namespace mog::internal
 
 #endif

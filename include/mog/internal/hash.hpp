@@ -1,7 +1,7 @@
-#ifndef _MO_INTERNAL_HASH_HPP_
-#define _MO_INTERNAL_HASH_HPP_
+#ifndef _MOG_INTERNAL_HASH_HPP_
+#define _MOG_INTERNAL_HASH_HPP_
 
-namespace mo::internal {
+namespace mog::internal {
 
 using hint = unsigned long long;
 using vint = long long;
@@ -176,9 +176,7 @@ class Hash3 {
 		return Hash3::raw(x * hashP(valueX).value() * hashQ(valueY).value() *
 						  hashR(valueZ).value());
 	}
-	hint value() {
-		return x;
-	}
+	hint value() { return x; }
 };
 
 template <hint P, hint Q, vint N = 0> class OrderedHash {
@@ -202,12 +200,10 @@ template <hint P, hint Q, vint N = 0> class OrderedHash {
 	inline bool operator==(const OrderedHash other) const {
 		return h == other.h && cnt == other.cnt;
 	}
-	hint value() {
-		return h.value();
-	}
+	hint value() { return h.value(); }
 	int size() { return cnt; }
 };
 
-}; // namespace mo::internal
+}; // namespace mog::internal
 
 #endif

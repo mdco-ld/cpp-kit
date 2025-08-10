@@ -1,27 +1,27 @@
-#ifndef _MO_INTERNAL_ZETA_HPP_
-#define _MO_INTERNAL_ZETA_HPP_
+#ifndef _MOG_INTERNAL_ZETA_HPP_
+#define _MOG_INTERNAL_ZETA_HPP_
 
-#include <mo/internal/concepts/group.hpp>
-#include <mo/internal/concepts/monoid.hpp>
-#include <mo/internal/enumerate-primes.hpp>
+#include <mog/internal/concepts/group.hpp>
+#include <mog/internal/concepts/monoid.hpp>
+#include <mog/internal/enumerate-primes.hpp>
 
 #include <vector>
 
-namespace mo::internal::zeta {
+namespace mog::internal::zeta {
 
 /**
  * Calculates the sum of the values of all subsets of M for every bitmask M.
  * Assumes S is a commutative monoid.
  */
 template <traits::Monoid S> void subsetZeta(std::vector<S> &v) {
-    int n = v.size();
-    for (int j = 1; j < n; j <<= 1) {
-        for (int i = 1; i < n; i++) {
-            if (i & j) {
-                v[i] += v[i ^ j];
-            }
-        }
-    }
+	int n = v.size();
+	for (int j = 1; j < n; j <<= 1) {
+		for (int i = 1; i < n; i++) {
+			if (i & j) {
+				v[i] += v[i ^ j];
+			}
+		}
+	}
 }
 
 /**
@@ -29,14 +29,14 @@ template <traits::Monoid S> void subsetZeta(std::vector<S> &v) {
  * Assumes S is a commutative group.
  */
 template <traits::Group S> void subsetMobius(std::vector<S> &v) {
-    int n = v.size();
-    for (int j = 1; j < n; j <<= 1) {
-        for (int i = 1; i < n; i++) {
-            if (i & j) {
-                v[i] -= v[i ^ j];
-            }
-        }
-    }
+	int n = v.size();
+	for (int j = 1; j < n; j <<= 1) {
+		for (int i = 1; i < n; i++) {
+			if (i & j) {
+				v[i] -= v[i ^ j];
+			}
+		}
+	}
 }
 
 /**
@@ -44,14 +44,14 @@ template <traits::Group S> void subsetMobius(std::vector<S> &v) {
  * Assumes S is a commutative monoid.
  */
 template <traits::Monoid S> void supersetZeta(std::vector<S> &v) {
-    int n = v.size();
-    for (int j = 1; j < n; j <<= 1) {
-        for (int i = 1; i < n; i++) {
-            if (i & j) {
-                v[i ^ j] += v[i];
-            }
-        }
-    }
+	int n = v.size();
+	for (int j = 1; j < n; j <<= 1) {
+		for (int i = 1; i < n; i++) {
+			if (i & j) {
+				v[i ^ j] += v[i];
+			}
+		}
+	}
 }
 
 /**
@@ -59,14 +59,14 @@ template <traits::Monoid S> void supersetZeta(std::vector<S> &v) {
  * Assumes S is a commutative group.
  */
 template <traits::Group S> void supersetMobius(std::vector<S> &v) {
-    int n = v.size();
-    for (int j = 1; j < n; j <<= 1) {
-        for (int i = 1; i < n; i++) {
-            if (i & j) {
-                v[i ^ j] -= v[i];
-            }
-        }
-    }
+	int n = v.size();
+	for (int j = 1; j < n; j <<= 1) {
+		for (int i = 1; i < n; i++) {
+			if (i & j) {
+				v[i ^ j] -= v[i];
+			}
+		}
+	}
 }
 
 /**
@@ -74,12 +74,12 @@ template <traits::Group S> void supersetMobius(std::vector<S> &v) {
  * Assumes S is a commutative monoid.
  */
 template <traits::Monoid T> void divisorZeta(std::vector<T> &v) {
-    int n = v.size();
-    for (int p : sieve::enumeratePrimes(n)) {
-        for (int i = 1; i * p < n; i++) {
-            v[i * p] += v[i];
-        }
-    }
+	int n = v.size();
+	for (int p : sieve::enumeratePrimes(n)) {
+		for (int i = 1; i * p < n; i++) {
+			v[i * p] += v[i];
+		}
+	}
 }
 
 /**
@@ -87,12 +87,12 @@ template <traits::Monoid T> void divisorZeta(std::vector<T> &v) {
  * Assumes S is a commutative group.
  */
 template <traits::Group T> void divisorMobius(std::vector<T> &v) {
-    int n = v.size();
-    for (int p : sieve::enumeratePrimes(n)) {
-        for (int i = n / p; i > 0; i--) {
-            v[i * p] -= v[i];
-        }
-    }
+	int n = v.size();
+	for (int p : sieve::enumeratePrimes(n)) {
+		for (int i = n / p; i > 0; i--) {
+			v[i * p] -= v[i];
+		}
+	}
 }
 
 /**
@@ -100,12 +100,12 @@ template <traits::Group T> void divisorMobius(std::vector<T> &v) {
  * Assumes S is a commutative monoid.
  */
 template <traits::Monoid T> void multipleZeta(std::vector<T> &v) {
-    int n = v.size();
-    for (int p : sieve::enumeratePrimes(n)) {
-        for (int i = n / p; i > 0; i--) {
-            v[i] += v[i * p];
-        }
-    }
+	int n = v.size();
+	for (int p : sieve::enumeratePrimes(n)) {
+		for (int i = n / p; i > 0; i--) {
+			v[i] += v[i * p];
+		}
+	}
 }
 
 /**
@@ -113,14 +113,14 @@ template <traits::Monoid T> void multipleZeta(std::vector<T> &v) {
  * Assumes S is a commutative group.
  */
 template <traits::Group T> void multipleMobius(std::vector<T> &v) {
-    int n = v.size();
-    for (int p : sieve::enumeratePrimes(n)) {
-        for (int i = 1; i * p < n; i++) {
-            v[i] -= v[i * p];
-        }
-    }
+	int n = v.size();
+	for (int p : sieve::enumeratePrimes(n)) {
+		for (int i = 1; i * p < n; i++) {
+			v[i] -= v[i * p];
+		}
+	}
 }
 
-}; // namespace mo::internal::zeta
+}; // namespace mog::internal::zeta
 
 #endif

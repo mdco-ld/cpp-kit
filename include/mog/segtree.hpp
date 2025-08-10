@@ -1,24 +1,24 @@
-#ifndef _MO_SEGTREE_HPP_
-#define _MO_SEGTREE_HPP_
+#ifndef _MOG_SEGTREE_HPP_
+#define _MOG_SEGTREE_HPP_
 
-#ifndef MO_LIB
-#define MO_LIB
+#ifndef MOG_LIB
+#define MOG_LIB
 #endif
 
-#include <mo/internal/segment-tree.hpp>
-#include <mo/internal/utils.hpp>
+#include <mog/internal/segment-tree.hpp>
+#include <mog/internal/utils.hpp>
 
-namespace mo {
+namespace mog {
 
-template<mo::internal::traits::Monoid S>
-using Segtree = mo::internal::SegmentTree<S>;
+template <mog::internal::traits::Monoid S>
+using Segtree = mog::internal::SegmentTree<S>;
 
-template<class T>
-using MinSegtree = Segtree<mo::internal::utils::traits::MinMonoid<T>>;
+template <class T>
+using MinSegtree = Segtree<mog::internal::utils::traits::MinMonoid<T>>;
 
-template<class T>
-using MaxSegtree = Segtree<mo::internal::utils::traits::MaxMonoid<T>>;
+template <class T>
+using MaxSegtree = Segtree<mog::internal::utils::traits::MaxMonoid<T>>;
 
-};
+}; // namespace mog
 
 #endif

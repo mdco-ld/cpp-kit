@@ -1,15 +1,15 @@
-#ifndef _MO_DSU_HPP_
-#define _MO_DSU_HPP_
+#ifndef _MOG_DSU_HPP_
+#define _MOG_DSU_HPP_
 
-#ifndef MO_LIB
-#define MO_LIB
+#ifndef MOG_LIB
+#define MOG_LIB
 #endif
 
-#include <mo/internal/dsu.hpp>
+#include <mog/internal/dsu.hpp>
 
-namespace mo {
+namespace mog {
 
-using DSU = mo::internal::DSU;
+using DSU = mog::internal::DSU;
 
 };
 

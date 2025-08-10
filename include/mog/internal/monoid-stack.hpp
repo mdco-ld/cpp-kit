@@ -1,10 +1,10 @@
-#ifndef _MO_INTERNAL_MONOID_STACK_HPP_
-#define _MO_INTERNAL_MONOID_STACK_HPP_
+#ifndef _MOG_INTERNAL_MONOID_STACK_HPP_
+#define _MOG_INTERNAL_MONOID_STACK_HPP_
 
-#include <mo/internal/concepts/monoid.hpp>
+#include <mog/internal/concepts/monoid.hpp>
 #include <vector>
 
-namespace mo::internal {
+namespace mog::internal {
 
 template <traits::Monoid S> class LeftMonoidStack {
   public:
@@ -62,6 +62,6 @@ template <traits::Monoid S> class RightMonoidStack {
 	std::vector<S> values;
 };
 
-}; // namespace mo::internal
+}; // namespace mog::internal
 
 #endif

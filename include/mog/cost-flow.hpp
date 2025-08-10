@@ -1,15 +1,15 @@
-#ifndef _MO_COST_FLOW_HPP_
-#define _MO_COST_FLOW_HPP_
+#ifndef _MOG_COST_FLOW_HPP_
+#define _MOG_COST_FLOW_HPP_
 
-#ifndef MO_LIB
-#define MO_LIB
+#ifndef MOG_LIB
+#define MOG_LIB
 #endif
 
-#include <mo/internal/cost-flow.hpp>
+#include <mog/internal/cost-flow.hpp>
 
-namespace mo {
+namespace mog {
 
-template<class Cap, class Cost>
+template <class Cap, class Cost>
 using CostFlowGraph = internal::CostFlowGraph<Cap, Cost>;
 
 };
