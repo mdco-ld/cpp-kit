@@ -2,16 +2,16 @@
 
 using namespace std;
 
-#if defined(MO_LIB)
-using namespace mo;
+#if defined(MOG_LIB)
+using namespace mog;
 #endif
 
 using ll = long long;
 
 #define int ll
 
-#if defined(MO_LOCAL)
-#include <mo/debug.hpp>
+#if defined(MOG_LOCAL)
+#include <mog/debug.hpp>
 #else
 #define dbg(...) 42
 #endif

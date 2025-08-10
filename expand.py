@@ -7,18 +7,18 @@ IGNORED_FILES = {'debug.hpp'}
 expanded_files = set()
 
 def is_local_include(line: str):
-    if line.startswith('#include <mo/') and line.endswith('>\n'):
+    if line.startswith('#include <mog/') and line.endswith('>\n'):
         return True
-    if line.startswith('#include "mo/') and line.endswith('"\n'):
+    if line.startswith('#include "mog/') and line.endswith('"\n'):
         return True
     return False
 
 def get_local_include_file(line: str):
-    filename = line[len('#include <mo/'):-2]
+    filename = line[len('#include <mog/'):-2]
     if filename in IGNORED_FILES:
         return '\n'
     print(f'Expanding {filename}')
-    filepath = os.path.join(os.getenv('MO_CPP_PATH'), 'mo', filename)
+    filepath = os.path.join(os.getenv('MOG_CPP_PATH'), 'mo', filename)
     contents = open(filepath).readlines()
     return contents
 
