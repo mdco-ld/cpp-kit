@@ -28,9 +28,10 @@ template <traits::Monoid S> class FenwickTree {
 	}
 
 	/**
-	 * Adds the value `value` at position i.
+	 * Adds the value `value` at position `i`.
 	 */
 	void add(int i, S value) {
+		i++;
 		val[i - 1] += value;
 		for (; i <= n; i += i & -i) {
 			t[i - 1] += value;
@@ -38,7 +39,7 @@ template <traits::Monoid S> class FenwickTree {
 	}
 
 	/**
-	 * Sum of values in the prefix `[1, r]`.
+	 * Sum of values in the prefix `[0, r)`.
 	 */
 	S prefixSum(int r) {
 		S s{};
@@ -49,12 +50,12 @@ template <traits::Monoid S> class FenwickTree {
 	}
 
 	/**
-	 * Sum of values in the range `[l, r]`.
+	 * Sum of values in the range `[l, r)`.
 	 */
 	S sum(int l, int r)
 		requires traits::Group<S>
 	{
-		return prefixSum(r) - prefixSum(l - 1);
+		return prefixSum(r) - prefixSum(l);
 	}
 
 	/**

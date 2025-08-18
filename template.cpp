@@ -14,6 +14,7 @@ using ll = long long;
 #include <mog/debug.hpp>
 #else
 #define dbg(...) 42
+#define dbgif(...) 42
 #endif
 
 const int MOD = 1e9 + 7;
