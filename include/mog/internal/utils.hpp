@@ -47,6 +47,10 @@ template <class T> struct MaxMonoid {
 	T value;
 	MaxMonoid() : value(limits<T>::minValue()) {}
 	MaxMonoid(T val) : value(val) {}
+	template <class U>
+	MaxMonoid(U val)
+		requires std::constructible_from<T, U>
+		: value(val) {}
 	MaxMonoid operator+(const MaxMonoid other) const {
 		return std::max(value, other.value);
 	}
@@ -60,11 +64,79 @@ template <class T> struct MinMonoid {
 	T value;
 	MinMonoid() : value(limits<T>::maxValue()) {}
 	MinMonoid(T val) : value(val) {}
+	template <class U>
+	MinMonoid(U val)
+		requires std::constructible_from<T, U>
+		: value(val) {}
 	MinMonoid operator+(const MinMonoid other) const {
 		return std::min(value, other.value);
 	}
 	MinMonoid &operator+=(const MinMonoid other) {
 		value = std::min(value, other.value);
+		return *this;
+	}
+};
+
+template <class T> struct MinCntMonoid {
+	T value;
+	int cnt;
+	MinCntMonoid() : value(limits<T>::maxValue()), cnt(0) {}
+	MinCntMonoid(T val) : value(val), cnt(1) {}
+	MinCntMonoid(T val, int count) : value(val), cnt(count) {}
+	template <class U>
+	MinCntMonoid(U val)
+		requires std::constructible_from<T, U>
+		: value(val), cnt(1) {}
+	MinCntMonoid operator+(const MinCntMonoid other) const {
+		if (value == other.value) {
+			return MinCntMonoid{value, cnt + other.cnt};
+		}
+		if (value < other.value) {
+			return *this;
+		}
+		return other;
+	}
+	MinCntMonoid &operator+=(const MinCntMonoid other) {
+		if (other.value < value) {
+			*this = other;
+			return *this;
+		}
+		if (value < other.value) {
+			return *this;
+		}
+		cnt += other.cnt;
+		return *this;
+	}
+};
+
+template <class T> struct MaxCntMonoid {
+	T value;
+	int cnt;
+	MaxCntMonoid() : value(limits<T>::minValue()), cnt(0) {}
+	MaxCntMonoid(T val) : value(val), cnt(1) {}
+	MaxCntMonoid(T val, int count) : value(val), cnt(count) {}
+	template <class U>
+	MaxCntMonoid(U val)
+		requires std::constructible_from<T, U>
+		: value(val), cnt(1) {}
+	MaxCntMonoid operator+(const MaxCntMonoid other) const {
+		if (value == other.value) {
+			return {value, cnt + other.cnt};
+		}
+		if (other.value < value) {
+			return *this;
+		}
+		return other;
+	}
+	MaxCntMonoid &operator+=(const MaxCntMonoid other) {
+		if (value < other.value) {
+			*this = other;
+			return *this;
+		}
+		if (other.value < value) {
+			return *this;
+		}
+		cnt += other.cnt;
 		return *this;
 	}
 };
@@ -168,6 +240,10 @@ template <internal::traits::Monoid S> struct ReverseMonoid {
 	S value;
 	ReverseMonoid() : value() {}
 	ReverseMonoid(S val) : value(val) {}
+	template <class U>
+	ReverseMonoid(U val)
+		requires std::constructible_from<S, U>
+		: value(val) {}
 	ReverseMonoid operator+(const ReverseMonoid other) const {
 		return other.value + value;
 	}

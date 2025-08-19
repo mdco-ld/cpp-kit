@@ -13,6 +13,10 @@ template <class T> using MaxMonoid = internal::utils::traits::MaxMonoid<T>;
 
 template <class T> using MinMonoid = internal::utils::traits::MinMonoid<T>;
 
+template <class T> using MinCntMonoid = internal::utils::traits::MinCntMonoid<T>;
+
+template <class T> using MaxCntMonoid = internal::utils::traits::MaxCntMonoid<T>;
+
 template <class T> using GcdMonoid = internal::utils::traits::GcdMonoid<T>;
 
 template <class T> using LcmMonoid = internal::utils::traits::LcmMonoid<T>;
