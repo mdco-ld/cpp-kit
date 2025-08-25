@@ -66,7 +66,7 @@ template <Integral Int> constexpr inline Int isqrt(Int x) {
 	}
 	Int l = 1;
 	Int r = x;
-	while (r - l > 0) {
+	while (r - l > 1) {
 		Int m = l + (r - l) / 2;
 		if (m <= x / m) {
 			l = m;
