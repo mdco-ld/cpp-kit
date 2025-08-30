@@ -43,7 +43,7 @@ template <traits::Semigroup S> class SegmentTree {
 	S sum(int l, int r)
 		requires traits::Monoid<S>
 	{
-		S accl, accr;
+		S accl{}, accr{};
 		for (l += n, r += n; l < r; l >>= 1, r >>= 1) {
 			if (l & 1) {
 				accl += t[l++];

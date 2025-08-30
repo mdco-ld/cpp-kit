@@ -10,14 +10,18 @@
 
 namespace mog {
 
-template <internal::traits::Semiring S>
-constexpr auto geometricSum = internal::math::geometricSum<S>;
+template <internal::traits::Semiring S> inline S geometricSum(S x, int n) {
+	return internal::math::geometricSum(x, n);
+}
 
 template <internal::traits::Semiring S>
-constexpr auto binPow = internal::math::binaryPower<S>;
+inline S binPow(S x, unsigned long long n) {
+	return internal::math::binaryPower<S>;
+}
 
-template<internal::numeric::Integral Int>
-constexpr auto isqrt = internal::numeric::isqrt<Int>;
+template <internal::numeric::Integral Int> inline Int isqrt(Int x) {
+	return internal::numeric::isqrt(x);
+}
 
 }; // namespace mog
 

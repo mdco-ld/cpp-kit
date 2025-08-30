@@ -26,6 +26,8 @@ class LinearSieve {
 
 	inline int getPrime(int i) { return primes[i]; }
 
+	inline const std::vector<int> &getPrimes() { return primes; }
+
 	inline int getSpf(int x) { return spf[x]; }
 
   private:

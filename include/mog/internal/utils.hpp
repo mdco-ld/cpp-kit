@@ -213,6 +213,21 @@ template <class T, T (*sum)(T, T), T (*zero)()> class MonoidOf {
 	}
 };
 
+template< class T>
+requires numeric::Integral<T>
+struct OrMonoid {
+	T value;
+	OrMonoid() : value(T{0}) {}
+	OrMonoid(T val) : value(val) {}
+	OrMonoid operator+(const OrMonoid other) const {
+		return value | other.value;
+	}
+	OrMonoid &operator+=(const OrMonoid other) {
+		value |= other.value;
+		return *this;
+	}
+};
+
 template <class T>
 	requires numeric::Integral<T>
 struct XorGroup {
