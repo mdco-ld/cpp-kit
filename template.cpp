@@ -17,8 +17,6 @@ using ll = long long;
 #define dbgif(...) 42
 #endif
 
-const int MOD = 1e9 + 7;
-
 mt19937 rng(random_device{}());
 
 int32_t main() {
