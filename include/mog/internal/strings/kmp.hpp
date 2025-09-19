@@ -12,7 +12,7 @@ template <class T> std::vector<int> kmp(const std::vector<T> &v) {
 	std::vector<int> ret(n);
 	for (int i = 1; i < n; i++) {
 		while (v[i] != v[pre] && pre > 0) {
-			pre = ret[pre];
+			pre = ret[pre - 1];
 		}
 		if (v[i] == v[pre]) {
 			ret[i] = ++pre;
@@ -27,7 +27,7 @@ template <class T> std::vector<int> kmp(const std::basic_string<T> &v) {
 	std::vector<int> ret(n);
 	for (int i = 1; i < n; i++) {
 		while (v[i] != v[pre] && pre > 0) {
-			pre = ret[pre];
+			pre = ret[pre - 1];
 		}
 		if (v[i] == v[pre]) {
 			ret[i] = ++pre;

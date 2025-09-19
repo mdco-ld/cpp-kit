@@ -12,7 +12,7 @@ struct DSU {
 	std::vector<int> parent;
 	std::vector<int> size;
 
-	DSU(int n) : parent(n + 1), size(n + 1, 1) {
+	DSU(int n) : parent(n), size(n, 1) {
 		std::iota(parent.begin(), parent.end(), 0);
 	}
 
@@ -23,9 +23,9 @@ struct DSU {
 		return parent[x] = root(parent[x]);
 	}
 
-	bool join(int x, int y) {
-		assert(1 <= x && x < parent.size());
-		assert(1 <= y && y < parent.size());
+	bool merge(int x, int y) {
+		assert(0 <= x && x < std::ssize(parent));
+		assert(0 <= y && y < std::ssize(parent));
 		x = root(x);
 		y = root(y);
 		if (x == y) {
@@ -40,8 +40,8 @@ struct DSU {
 	}
 
 	bool same(int x, int y) {
-		assert(1 <= x && x < parent.size());
-		assert(1 <= y && y < parent.size());
+		assert(0 <= x && x < std::ssize(parent));
+		assert(0 <= y && y < std::ssize(parent));
 		return root(x) == root(y);
 	}
 };

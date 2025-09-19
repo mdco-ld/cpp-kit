@@ -36,9 +36,7 @@ static std::vector<int> maximalTopSort(DiGraph &g,
 	auto rev = g.reverse();
 	std::vector<int> deg(n);
 	for (int i = 0; i < n; i++) {
-		for (int j : rev[i]) {
-			deg[j]++;
-		}
+		deg[i] = std::ssize(g[i]);
 	}
 	std::priority_queue<int, std::vector<int>, decltype(less)> q;
 	for (int i = 0; i < n; i++) {
