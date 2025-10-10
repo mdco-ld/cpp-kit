@@ -1,5 +1,7 @@
 #include <bits/stdc++.h>
 
+#pragma GCC target("popcnt,avx2")
+
 using namespace std;
 
 #if defined(MOG_LIB)
