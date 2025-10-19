@@ -10,7 +10,7 @@
 namespace mog {
 
 template <internal::traits::Monoid S>
-using MonoidQueue = internal::RightMonoidStack<S>;
+using MonoidQueue = internal::MonoidQueue<S>;
 
 };
 
