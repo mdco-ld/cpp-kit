@@ -46,6 +46,63 @@ struct DSU {
 	}
 };
 
+class DSURollback {
+	std::vector<int> parent;
+	std::vector<int> rank;
+
+	struct MergeOperation {
+		int y;
+		int py;
+		int x;
+		int rx;
+	};
+
+	std::vector<MergeOperation> operations;
+
+  public:
+	DSURollback(int n) : parent(n), rank(n, 0) {
+		std::iota(parent.begin(), parent.end(), 0);
+	}
+
+	int root(int x) {
+		while (x != parent[x]) {
+			x = parent[x];
+		}
+		return x;
+	}
+
+	bool merge(int x, int y) {
+		x = root(x);
+		y = root(y);
+		if (x == y) {
+			return false;
+		}
+		if (rank[x] < rank[y]) {
+			std::swap(x, y);
+		}
+		operations.emplace_back(y, parent[y], x, rank[x]);
+		parent[y] = x;
+		if (rank[x] == rank[y]) {
+			rank[x]++;
+		}
+		return true;
+	}
+
+	bool same(int x, int y) {
+		return root(x) == root(y);
+	}
+
+	void rollback() {
+		if (operations.empty()) {
+			return;
+		}
+		auto [y, py, x, rx] = operations.back();
+		operations.pop_back();
+		parent[y] = py;
+		rank[x] = rx;
+	}
+};
+
 }; // namespace mog::internal
 
 #endif
