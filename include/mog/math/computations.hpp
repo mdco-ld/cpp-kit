@@ -10,6 +10,11 @@
 
 namespace mog {
 
+template <internal::numeric::Integral Int>
+inline Int floorSum(Int n, Int a, Int b, Int m) {
+	return internal::math::floorSum(n, a, b, m);
+}
+
 template <internal::traits::Semiring S> inline S geometricSum(S x, int n) {
 	return internal::math::geometricSum(x, n);
 }

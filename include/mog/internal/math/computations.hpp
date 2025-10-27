@@ -3,8 +3,34 @@
 
 #include <mog/internal/concepts/semiring.hpp>
 #include <mog/internal/math/matrix.hpp>
+#include <mog/internal/numeric.hpp>
 
 namespace mog::internal::math {
+
+template <numeric::Integral Int>
+constexpr Int floorSum(Int n, Int a, Int b, Int m) {
+	Int ans = 0;
+	if (a >= m) {
+		ans += (a / m) * n * (n - 1) / 2;
+		a %= m;
+	}
+	if (b >= m) {
+		ans += n * (b / m);
+		b %= m;
+	}
+	if (a == 0) {
+		return ans;
+	}
+	if (n == 0) {
+		return ans;
+	}
+	Int y = (a * n + b) / m;
+	if (y == 0) {
+		return ans;
+	}
+	ans += floorSum(y, m, (a * n + b) % m, a);
+	return ans;
+}
 
 template <traits::Semiring S> constexpr S geometricSum(S x, int n) {
 	using Mat = MatrixN<S, 2, 2>;
