@@ -1,1 +1,0 @@
-cpp-kit is a kit for competitive programming in C++.
