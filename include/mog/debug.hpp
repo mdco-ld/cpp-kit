@@ -185,4 +185,6 @@ template <typename T, typename... TRest> void __dbg(T first, TRest... rest) {
 			dbg(__VA_ARGS__);                                                  \
 	} while (0)
 
+#define dbgb() if (true)
+
 #endif

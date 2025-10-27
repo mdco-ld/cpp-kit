@@ -17,6 +17,7 @@ using ll = long long;
 #else
 #define dbg(...) 42
 #define dbgif(...) 42
+#define dbgb if (false)
 #endif
 
 mt19937 rng(random_device{}());
