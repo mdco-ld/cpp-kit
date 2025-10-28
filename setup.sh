@@ -8,6 +8,8 @@ else
 	echo "Failed to recognize shell"
 fi
 
+mkdir -p ~/bin
+
 if [[ ! -f "~/bin/expand.py" ]]; then
 	ln -s "$(pwd)/expand.py" ~/bin/expand.py
 fi
